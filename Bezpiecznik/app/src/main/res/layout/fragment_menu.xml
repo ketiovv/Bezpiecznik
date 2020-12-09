@@ -6,14 +6,43 @@
     android:layout_height="match_parent"
     tools:context="view.MenuFragment">
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/menuBtnTesty"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Test"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="128dp"
+        android:layout_marginEnd="128dp"
+        android:text="@string/testy"
+        app:layout_constraintBottom_toTopOf="@+id/menuBtnStats"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/menuBtnStats"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginEnd="128dp"
+        android:text="@string/statystyka"
+        app:layout_constraintBottom_toTopOf="@+id/menuBtnSettings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menuBtnTesty" />
+
+    <Button
+        android:id="@+id/menuBtnSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginEnd="128dp"
+        android:text="@string/ustawienia"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menuBtnStats" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
