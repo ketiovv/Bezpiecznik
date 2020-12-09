@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import com.example.bezpiecznik.R
+import kotlinx.android.synthetic.main.fragment_menu.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +40,23 @@ class MenuFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_menu, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // --- --- --- --- our code --- --- --- ---
+
+        menuBtnTesty.setOnClickListener{ view ->
+            view.findNavController().navigate(R.id.action_menuFragment_to_testsFragment)
+        }
+        menuBtnStats.setOnClickListener{ view ->
+            view.findNavController().navigate(R.id.action_menuFragment_to_statsFragment)
+        }
+        menuBtnSettings.setOnClickListener{ view ->
+            view.findNavController().navigate(R.id.action_menuFragment_to_settingsFragment)
+        }
+
+        // --- --- --- --- --- ---- --- --- --- ---
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
