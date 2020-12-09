@@ -1,0 +1,7 @@
+---------------------------
+created for project structure
+to delete after add any file
+---------------------------
+
+package for interface with api connection
+

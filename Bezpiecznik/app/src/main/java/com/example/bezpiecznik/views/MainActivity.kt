@@ -1,4 +1,4 @@
-package com.example.bezpiecznik.view
+package com.example.bezpiecznik.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
