@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="PatternLock">
-
+        <attr name="pattern_row_count" format="integer"/>
+        <attr name="pattern_col_count" format="integer"/>
     </declare-styleable>
 </resources>
