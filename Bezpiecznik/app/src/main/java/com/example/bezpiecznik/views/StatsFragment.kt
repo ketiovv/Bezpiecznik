@@ -1,60 +1,96 @@
 package com.example.bezpiecznik.views
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
+import com.example.bezpiecznik.api.ApiRoutes
+import com.example.bezpiecznik.api.IApiRequest
+import com.example.bezpiecznik.models.entities.*
+import com.example.bezpiecznik.viewmodels.StatsListAdapter
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_stats.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.awaitResponse
+import retrofit2.converter.gson.GsonConverterFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [StatsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class StatsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var viewManager: RecyclerView.LayoutManager
+    lateinit var statsListAdapter: StatsListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+        viewManager = LinearLayoutManager(requireContext())
+
         // Inflate the layout for this fragment
+        var userList = MutableLiveData<MutableList<User>>()
+
+
+        var user = User("1","Konrad","Konrad123", mutableListOf(),
+            Pattern(mutableListOf(Cell(1,0))),Settings())
+
+        var gson = Gson()
+        var jsonString = gson.toJson(user)
+        Log.d("myTag",jsonString)
+
+        val api = Retrofit.Builder().baseUrl(ApiRoutes.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(IApiRequest::class.java)
+
+        //api.addJSon(user)
+
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val response = api.getJson().awaitResponse()
+            if (response.isSuccessful){
+                val data= response.body()!!
+                // postValue instead of value, because it's called asynchronous
+                userList.postValue(mutableListOf(data))
+                Log.d("api-connection",userList.value!!.toString())
+
+            }
+            else{
+                Log.d("api-connection","response failed")
+                userList.postValue(ArrayList())
+            }
+        }
+
+        statsListAdapter = StatsListAdapter(userList)
+
+
         return inflater.inflate(R.layout.fragment_stats, container, false)
+
+
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerView.apply{
+            adapter=statsListAdapter
+            layoutManager=viewManager
+        }
+
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment StatsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            StatsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = StatsFragment()
     }
 }
