@@ -6,40 +6,143 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.widget.GridLayout
-import androidx.core.content.ContextCompat
-import androidx.core.view.setPadding
 import com.example.bezpiecznik.R
 import java.util.ArrayList
 
-class PatternLockView :GridLayout{
+class PatternLockView(context: Context, attributeSet: AttributeSet) : GridLayout(context, attributeSet) {
+    private var cells = ArrayList<CellView>()
+    private var selectedCells = ArrayList<CellView>()
 
-    var patternRowCount = 0
-    var patternColCount = 0
+    private var patternPaint = Paint()
+    private var patternPath = Path()
 
-    constructor(context:Context) : super(context)
-    constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet){
-        var attributes = context.obtainStyledAttributes(attributeSet, R.styleable.PatternLock)
+    private var lastPointX = 0f
+    private var lastPaintY = 0f
 
-        // TODO: Think about getIntegerOrThrow
+    private var patternRowCount = 0
+    private var patternColCount = 0
+
+    init {
+        val attributes = context.obtainStyledAttributes(attributeSet, R.styleable.PatternLock)
+
         patternRowCount = attributes.getInteger(R.styleable.PatternLock_pattern_row_count, 3)
         patternColCount = attributes.getInteger(R.styleable.PatternLock_pattern_col_count, 3)
-
         attributes.recycle()
 
         rowCount = patternRowCount
         columnCount = patternColCount
 
-        setupDots()
+        initDots()
+        initPathPaint()
     }
 
-    fun setupDots(){
-        for(x in 0 until patternColCount){
-            for(y in 0 until patternRowCount){
-                var cell = CellView(context, patternColCount)
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when(event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                val hitCell = getHitCell(event.x.toInt(), event.y.toInt())
+                if (hitCell == null) {
+                    return false
+                } else {
+                    notifyCellSelected(hitCell)
+                }
+            }
+
+            MotionEvent.ACTION_MOVE -> handleActionMove(event)
+            MotionEvent.ACTION_UP -> onFinish()
+            MotionEvent.ACTION_CANCEL -> reset()
+
+            else -> return false
+        }
+        return true
+    }
+
+    private fun handleActionMove(event: MotionEvent) {
+        val hitCell = getHitCell(event.x.toInt(), event.y.toInt())
+        if (hitCell != null) {
+            if (!selectedCells.contains(hitCell)) {
+                notifyCellSelected(hitCell)
+            }
+        }
+
+        lastPointX = event.x
+        lastPaintY = event.y
+
+        invalidate()
+    }
+
+    private fun notifyCellSelected(cell: CellView) {
+        selectedCells.add(cell)
+        val center = cell.getCenter()
+        if (selectedCells.size == 1) {
+                patternPath.moveTo(center.x.toFloat(), center.y.toFloat())
+        } else {
+                patternPath.lineTo(center.x.toFloat(), center.y.toFloat())
+        }
+    }
+
+    override fun dispatchDraw(canvas: Canvas?) {
+        super.dispatchDraw(canvas)
+        canvas?.drawPath(patternPath, patternPaint)
+        if (selectedCells.size > 0 && lastPointX > 0 && lastPaintY > 0) {
+                val center = selectedCells[selectedCells.size - 1].getCenter()
+                canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPaintY, patternPaint)
+            }
+        }
+
+    private fun initDots() {
+        for(i in 0 until patternRowCount) {
+            for(j in 0 until patternColCount) {
+                val cell = CellView(context, patternColCount)
                 addView(cell)
+                cells.add(cell)
             }
         }
     }
+
+    private fun initPathPaint() {
+        patternPaint.isAntiAlias = true
+        patternPaint.isDither = true
+        patternPaint.style = Paint.Style.STROKE
+        patternPaint.strokeJoin = Paint.Join.ROUND
+        patternPaint.strokeCap = Paint.Cap.ROUND
+        patternPaint.strokeWidth = 6f
+        patternPaint.color = Color.BLACK
+    }
+
+    private fun reset() {
+        selectedCells.clear()
+        patternPath.reset()
+
+        lastPointX = 0f
+        lastPaintY = 0f
+
+        invalidate()
+    }
+
+    private fun getHitCell(x: Int, y: Int) : CellView? {
+        for(cell in cells) {
+            if (isSelected(cell, x, y)) {
+                return cell
+            }
+        }
+        return null
+    }
+
+    private fun isSelected(view: View, x: Int, y: Int) : Boolean {
+        val innerPadding = view.width * 0.2f
+
+        return x >= view.left + innerPadding && x <= view.right - innerPadding &&
+                y >= view.top + innerPadding && y <= view.bottom - innerPadding
+    }
+
+    private fun onFinish() {
+        lastPointX = 0f
+        lastPaintY = 0f
+
+        reset()
+    }
+
 }

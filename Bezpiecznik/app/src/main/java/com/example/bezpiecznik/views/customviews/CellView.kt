@@ -3,6 +3,7 @@ package com.example.bezpiecznik.views.customviews
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Point
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.example.bezpiecznik.R
@@ -35,6 +36,13 @@ class CellView(context: Context, var columnCount: Int): View(context){
 
     fun getRadius() : Int {
         return (Math.min(width, height) - (paddingLeft + paddingRight)) / 2
+    }
+
+    fun getCenter() : Point {
+        var point = Point()
+        point.x = left + (right - left) / 2
+        point.y = top + (bottom - top) / 2
+        return point
     }
 
 }
