@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">Bezpiecznik</string>
+
+    <!-- Menu page -->
     <string name="testy">Testy</string>
-    <string name="statystyka">Statystyka</string>
-    <string name="ustawienia">Ustawienia</string>
+    <string name="statystyka">Statistics</string>
+    <string name="ustawienia">Settings</string>
+    <string name="about">About</string>
+
+    <!-- About page -->
+    <string name="authors">Authors:</string>
+    <string name="wojtek">Wojciech Kajstura</string>
+    <string name="konrad">Konrad Lubera</string>
+    <string name="remik">Remigiusz Drobinski</string>
+    <string name="polsl">Silesian University of Technology</string>
+    <string name="github">Github</string>
+    <string name="desc">Application description:</string>
+
 </resources>
