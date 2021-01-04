@@ -55,6 +55,10 @@ class MenuFragment : Fragment() {
             view.findNavController().navigate(R.id.action_menuFragment_to_settingsFragment)
         }
 
+        menuBtnAbout.setOnClickListener{ view ->
+            view.findNavController().navigate(R.id.action_menuFragment_to_aboutFragment)
+        }
+
         // --- --- --- --- --- ---- --- --- --- ---
     }
     companion object {

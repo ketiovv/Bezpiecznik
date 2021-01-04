@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_menuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/testsFragment"
@@ -35,4 +38,8 @@
         android:name="com.example.bezpiecznik.views.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings"/>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.bezpiecznik.views.AboutFragment"
+        android:label="AboutFragment" />
 </navigation>
