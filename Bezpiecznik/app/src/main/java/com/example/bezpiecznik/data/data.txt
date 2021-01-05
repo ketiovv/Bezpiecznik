@@ -1,7 +1,0 @@
----------------------------
-created for project structure
-to delete after add any file
----------------------------
-
-package for e.g. repository
-in practice here we'll create repository which implement service from api package

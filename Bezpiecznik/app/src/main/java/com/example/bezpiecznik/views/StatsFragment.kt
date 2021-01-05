@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
-import com.example.bezpiecznik.api.ApiRoutes
-import com.example.bezpiecznik.api.IApiRequest
+import com.example.bezpiecznik.models.api.ApiRoutes
+import com.example.bezpiecznik.models.api.IApiRequest
 import com.example.bezpiecznik.models.entities.*
 import com.example.bezpiecznik.adapters.StatsListAdapter
 import com.google.gson.Gson
