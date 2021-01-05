@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +13,7 @@ import com.example.bezpiecznik.R
 import com.example.bezpiecznik.api.ApiRoutes
 import com.example.bezpiecznik.api.IApiRequest
 import com.example.bezpiecznik.models.entities.*
-import com.example.bezpiecznik.viewmodels.StatsListAdapter
+import com.example.bezpiecznik.adapters.StatsListAdapter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_stats.*
 import kotlinx.coroutines.Dispatchers

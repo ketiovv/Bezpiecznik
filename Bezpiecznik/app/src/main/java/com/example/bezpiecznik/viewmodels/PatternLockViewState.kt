@@ -1,9 +1,9 @@
 package com.example.bezpiecznik.viewmodels
 
-import com.example.bezpiecznik.views.customviews.mvvm.interfaces.MvvmCustomViewState
+import com.example.bezpiecznik.views.customviews.mvvm.interfaces.IMvvmCustomViewState
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class PatternLockViewState(
-        val hexCode: String?
-): MvvmCustomViewState
+        val backgroundColorHexCode: String?
+): IMvvmCustomViewState

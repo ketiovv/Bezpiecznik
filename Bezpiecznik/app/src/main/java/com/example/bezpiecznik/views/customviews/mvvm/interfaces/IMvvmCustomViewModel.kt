@@ -1,5 +1,5 @@
 package com.example.bezpiecznik.views.customviews.mvvm.interfaces
 
-interface MvvmCustomViewModel<T: MvvmCustomViewState> {
+interface IMvvmCustomViewModel<T: IMvvmCustomViewState> {
     var state: T?
 }

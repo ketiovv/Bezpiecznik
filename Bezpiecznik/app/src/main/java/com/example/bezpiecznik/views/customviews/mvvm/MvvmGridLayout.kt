@@ -7,10 +7,10 @@ import android.widget.GridLayout
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.views.customviews.mvvm.exceptions.LifecycleOwnerNotFoundException
 import com.example.bezpiecznik.views.customviews.mvvm.interfaces.IMvvmCustomView
-import com.example.bezpiecznik.views.customviews.mvvm.interfaces.MvvmCustomViewModel
-import com.example.bezpiecznik.views.customviews.mvvm.interfaces.MvvmCustomViewState
+import com.example.bezpiecznik.views.customviews.mvvm.interfaces.IMvvmCustomViewModel
+import com.example.bezpiecznik.views.customviews.mvvm.interfaces.IMvvmCustomViewState
 
-abstract class MvvmGridLayout<V: MvvmCustomViewState, T: MvvmCustomViewModel<V>>(
+abstract class MvvmGridLayout<V: IMvvmCustomViewState, T: IMvvmCustomViewModel<V>>(
         context: Context,
         attributeSet: AttributeSet
 ) :
