@@ -8,11 +8,16 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.widget.GridLayout
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.example.bezpiecznik.R
+import com.example.bezpiecznik.viewmodels.PatternLockViewModel
+import com.example.bezpiecznik.viewmodels.PatternLockViewState
+import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
 import java.util.ArrayList
 
-class PatternLockView(context: Context, attributeSet: AttributeSet) : GridLayout(context, attributeSet) {
+class PatternLockView(context: Context, attributeSet: AttributeSet)
+    : MvvmGridLayout<PatternLockViewState, PatternLockViewModel>(context, attributeSet) {
     private var cells = ArrayList<CellView>()
     private var selectedCells = ArrayList<CellView>()
 
@@ -143,6 +148,18 @@ class PatternLockView(context: Context, attributeSet: AttributeSet) : GridLayout
         lastPaintY = 0f
 
         reset()
+    }
+
+    override val viewModel = PatternLockViewModel()
+
+    override fun onLifecycleOwnerAttached(lifecycleOwner: LifecycleOwner) {
+        observeLiveData(lifecycleOwner)
+    }
+
+    private fun observeLiveData(lifecycleOwner: LifecycleOwner) {
+        viewModel.getLiveData().observe(lifecycleOwner, Observer {
+            setBackgroundColor(Color.parseColor(it))
+        })
     }
 
 }
