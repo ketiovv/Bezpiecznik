@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="views.TestsFragment">
 
-
     <com.example.bezpiecznik.views.customviews.PatternLockView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +14,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498"
-        app:pattern_col_count = "4"
-        app:pattern_row_count = "4"/>
+        app:layout_constraintVertical_bias="0.498"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
