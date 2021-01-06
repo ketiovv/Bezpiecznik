@@ -7,6 +7,7 @@
     tools:context="views.TestsFragment">
 
     <com.example.bezpiecznik.views.customviews.PatternLockView
+        android:id="@+id/pattern_lock_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
