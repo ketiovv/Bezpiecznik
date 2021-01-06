@@ -3,26 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_file"
-    app:startDestination="@id/menuFragment">
+    app:startDestination="@id/testsFragment">
 
     <fragment
         android:id="@+id/menuFragment"
         android:name="com.example.bezpiecznik.views.MenuFragment"
         android:label="MenuFragment"
-        tools:layout="@layout/fragment_menu">
-        <action
-            android:id="@+id/action_menuFragment_to_testsFragment"
-            app:destination="@id/testsFragment" />
-        <action
-            android:id="@+id/action_menuFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-        <action
-            android:id="@+id/action_menuFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_menuFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_menu"/>
     <fragment
         android:id="@+id/testsFragment"
         android:name="com.example.bezpiecznik.views.TestsFragment"
@@ -37,7 +24,11 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.bezpiecznik.views.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings"/>
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.bezpiecznik.views.AboutFragment"

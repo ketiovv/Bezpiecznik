@@ -45,19 +45,19 @@ class MenuFragment : Fragment() {
 
         // --- --- --- --- our code --- --- --- ---
 
-        menuBtnTesty.setOnClickListener{ view ->
-            view.findNavController().navigate(R.id.action_menuFragment_to_testsFragment)
-        }
-        menuBtnStats.setOnClickListener{ view ->
-            view.findNavController().navigate(R.id.action_menuFragment_to_statsFragment)
-        }
-        menuBtnSettings.setOnClickListener{ view ->
-            view.findNavController().navigate(R.id.action_menuFragment_to_settingsFragment)
-        }
-
-        menuBtnAbout.setOnClickListener{ view ->
-            view.findNavController().navigate(R.id.action_menuFragment_to_aboutFragment)
-        }
+//        menuBtnTesty.setOnClickListener{ view ->
+//            view.findNavController().navigate(R.id.action_menuFragment_to_testsFragment)
+//        }
+//        menuBtnStats.setOnClickListener{ view ->
+//            view.findNavController().navigate(R.id.action_menuFragment_to_statsFragment)
+//        }
+//        menuBtnSettings.setOnClickListener{ view ->
+//            view.findNavController().navigate(R.id.action_menuFragment_to_settingsFragment)
+//        }
+//
+//        menuBtnAbout.setOnClickListener{ view ->
+//            view.findNavController().navigate(R.id.action_menuFragment_to_aboutFragment)
+//        }
 
         // --- --- --- --- --- ---- --- --- --- ---
     }

@@ -2,9 +2,9 @@
     <string name="app_name">Bezpiecznik</string>
 
     <!-- Menu page -->
-    <string name="testy">Testy</string>
-    <string name="statystyka">Statistics</string>
-    <string name="ustawienia">Settings</string>
+    <string name="tests">Tests</string>
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
     <string name="about">About</string>
 
     <!-- About page -->
