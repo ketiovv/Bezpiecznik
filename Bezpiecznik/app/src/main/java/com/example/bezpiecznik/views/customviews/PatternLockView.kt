@@ -27,8 +27,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     private var lastPointX = 0f
     private var lastPaintY = 0f
 
-    private var patternRowCount = 0
-    private var patternColCount = 0
+    var patternRowCount = 0
+    var patternColCount = 0
 
     init {
         val attributes = context.obtainStyledAttributes(attributeSet, R.styleable.PatternLock)
@@ -97,7 +97,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
             }
         }
 
-    private fun initDots() {
+    fun initDots() {
         for(i in 0 until patternRowCount) {
             for(j in 0 until patternColCount) {
                 val cell = CellView(context, patternColCount)
@@ -105,6 +105,11 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                 cells.add(cell)
             }
         }
+    }
+
+    override fun removeAllViews() {
+        super.removeAllViews()
+        cells.clear()
     }
 
     private fun initPathPaint() {
@@ -117,7 +122,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         patternPaint.color = Color.BLACK
     }
 
-    private fun reset() {
+    fun reset() {
         selectedCells.clear()
         patternPath.reset()
 
@@ -160,6 +165,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         viewModel.getLiveData().observe(lifecycleOwner, Observer {
             setBackgroundColor(Color.parseColor(it))
         })
+
     }
 
 }
