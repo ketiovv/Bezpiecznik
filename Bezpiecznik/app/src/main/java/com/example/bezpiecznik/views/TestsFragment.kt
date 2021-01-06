@@ -42,7 +42,11 @@ class TestsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // TODO: Skalowanie dzieje się tylko kolumanami, poprawić tak, żeby skalowało też według row
+
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
+
         var col = sp.getInt("col_number",3)
         var row = sp.getInt("row_number",3)
 
