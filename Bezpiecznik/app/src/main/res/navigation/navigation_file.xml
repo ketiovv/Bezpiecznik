@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_about"/>
     <fragment
         android:id="@+id/settings2Fragment"
-        android:name="com.example.bezpiecznik.Settings2Fragment"
+        android:name="com.example.bezpiecznik.views.PreferencesFragment"
         android:label="Settings2Fragment">
         <action
             android:id="@+id/action_settings2Fragment_to_aboutFragment"

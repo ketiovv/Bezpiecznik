@@ -1,17 +1,13 @@
-package com.example.bezpiecznik
+package com.example.bezpiecznik.views
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import androidx.preference.SeekBarPreference
+import com.example.bezpiecznik.R
 
-class Settings2Fragment : PreferenceFragmentCompat() {
+class PreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
