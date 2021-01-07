@@ -3,6 +3,7 @@
 
     <PreferenceCategory
         app:title="Pattern settings">
+
         <SeekBarPreference
             android:key="col_number"
             app:title="Number of columns"
@@ -10,6 +11,7 @@
             app:defaultValue="3"
             app:min="1"
             android:max="10"/>
+
         <SeekBarPreference
             android:key="row_number"
             app:title="Number of rows"
@@ -17,13 +19,24 @@
             app:defaultValue="3"
             app:min="1"
             android:max="10"/>
-        <EditTextPreference
-            android:defaultValue="100"
-            android:dialogTitle="xx"
-            android:inputType="number"
-            android:key="pref_query_limit"
-            android:summary="x"
-            android:title="x" />
+
+        <!-- TODO: Choose color of selected dots -->
+
+        <!-- TODO: Choose color of line -->
+
+
+        <SwitchPreference
+            android:key="display_indicator"
+            app:title="Display indicator"
+            app:defaultValue="false"/>
+
+        <SwitchPreference
+            android:key="background"
+            app:title="Fill dot background"
+            app:defaultValue="false"/>
+
+        <!-- TODO: Add nav button to AboutFragment -->
+
     </PreferenceCategory>
 
 </PreferenceScreen>
