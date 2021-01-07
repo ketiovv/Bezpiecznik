@@ -110,7 +110,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     fun initDots() {
         for(i in 0 until patternRowCount) {
             for(j in 0 until patternColCount) {
-                val cell = CellView(context, patternColCount)
+                val cell = CellView(context, patternColCount,i * columnCount + j)
                 addView(cell)
                 cells.add(cell)
             }
@@ -190,9 +190,9 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     }
 
     private fun observeLiveData(lifecycleOwner: LifecycleOwner) {
-        viewModel.getLiveData().observe(lifecycleOwner, Observer {
-            setBackgroundColor(Color.parseColor(it))
-        })
+//        viewModel.getLiveData().observe(lifecycleOwner, Observer {
+//            setBackgroundColor(Color.parseColor(it))
+//        })
 
     }
 
