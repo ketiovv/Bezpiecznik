@@ -4,13 +4,20 @@
     <PreferenceCategory
         app:title="Pattern settings">
 
+        <!-- TODO: Set onclick listener-->
+        <Preference
+            android:title="Reset"
+            android:key="reset_btn"
+            android:summary="reset current pattern"/>
+
         <SeekBarPreference
             android:key="col_number"
             app:title="Number of columns"
             app:showSeekBarValue="true"
             app:defaultValue="3"
             app:min="1"
-            android:max="10"/>
+            android:max="10"
+            app:enabled="false"/>
 
         <SeekBarPreference
             android:key="row_number"
@@ -18,7 +25,12 @@
             app:showSeekBarValue="true"
             app:defaultValue="3"
             app:min="1"
-            android:max="10"/>
+            android:max="10"
+            app:enabled="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="Appearance">
 
         <!-- TODO: Choose color of selected dots -->
 
@@ -35,8 +47,15 @@
             app:title="Fill dot background"
             app:defaultValue="false"/>
 
-        <!-- TODO: Add nav button to AboutFragment -->
-
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:title="Info">
+
+        <Preference
+            android:title="About app"
+            android:key="about_btn"
+            android:summary="open about fragment"/>
+        <!-- TODO: Set onclick listener-->
+    </PreferenceCategory>
 </PreferenceScreen>
