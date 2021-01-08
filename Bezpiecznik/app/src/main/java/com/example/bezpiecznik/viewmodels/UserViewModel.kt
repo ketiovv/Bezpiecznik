@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.bezpiecznik.models.api.ApiRoutes
 import com.example.bezpiecznik.models.api.IApiRequest
+import com.example.bezpiecznik.models.api.Response
 import com.example.bezpiecznik.models.entities.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,7 +29,8 @@ class UserViewModel() : ViewModel() {
             if (response.isSuccessful){
                 val data = response.body()
                 if (data != null) {
-                    saveToSPCallback(user,data.id)
+                    saveToSPCallback(user,data.name)
+                    createUserCollection()
                 }
             }
             else{
@@ -52,7 +54,22 @@ class UserViewModel() : ViewModel() {
                 Log.d("api-connection","response failed")
             }
         }
+    }
 
+    private fun createUserCollection(){
+        GlobalScope.launch(Dispatchers.IO) {
+            val response = api.createUserCollection(Response(binID)).awaitResponse()
+            if (response.isSuccessful){
+                val data = response.body()
+                if(data != null){
+                    Log.d("Response",data.toString())
+                    collectionID = data.name
+                }
+            }
+            else{
+                Log.d("api-connection","response failed")
+            }
+        }
     }
 
     private fun rand(): String {
@@ -69,5 +86,6 @@ class UserViewModel() : ViewModel() {
     companion object{
         lateinit var user: User
         lateinit var binID : String
+        lateinit var collectionID: String
     }
 }

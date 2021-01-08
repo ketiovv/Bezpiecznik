@@ -9,8 +9,8 @@ interface IApiRequest {
         "Content-Type: application/json",
         "secret-key: $2b$10\$SKWkhv2HZAovsIicIy/61eeFcJGrHgoev6y5zDriR4us.vHiFmRve"
     )
-    @POST("b")
-    fun addJSon(@Body user: User): Call<User>
+    @POST("c")
+    fun createUserCollection(@Body name: Response): Call<Response>
 
     @Headers(
         "secret-key: $2b$10\$SKWkhv2HZAovsIicIy/61eeFcJGrHgoev6y5zDriR4us.vHiFmRve"

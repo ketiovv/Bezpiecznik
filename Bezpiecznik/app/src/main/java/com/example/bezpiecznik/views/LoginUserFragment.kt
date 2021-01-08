@@ -35,7 +35,9 @@ class LoginUserFragment : Fragment() {
             if(it){
                 userLoaded = true
                 UserViewModel.binID = sharedPref.getString(getString(R.string.binID), "")!!
+                UserViewModel.collectionID = sharedPref.getString(getString(R.string.collectionID), "")!!
                 Log.d("myTag",UserViewModel.user.toString())
+                Log.d("myTag",UserViewModel.collectionID)
             }
 
         }

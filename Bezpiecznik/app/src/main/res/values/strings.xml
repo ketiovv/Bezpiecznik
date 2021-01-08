@@ -28,6 +28,7 @@
     <!-- Sharded Preferences key -->
     <string name="userID">com.example.bezpiecznik.userID</string>
     <string name="binID">com.example.bezpiecznik.binID</string>
+    <string name="collectionID">com.example.bezpiecznik.collectionID</string>
 
     <!-- Create user fragment  -->
     <string name="hello">Hello!</string>
