@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import com.example.bezpiecznik.R
+import kotlinx.android.synthetic.main.fragment_tests.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +40,25 @@ class TestsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_tests, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // TODO: Skalowanie dzieje się tylko kolumanami, poprawić tak, żeby skalowało też według row
+
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+
+        var col = sp.getInt("col_number",3)
+        var row = sp.getInt("row_number",3)
+
+        pattern_lock_id.columnCount = col
+        pattern_lock_id.rowCount = row
+        pattern_lock_id.patternColCount = col
+        pattern_lock_id.patternRowCount = row
+
+        pattern_lock_id.reset()
+        pattern_lock_id.removeAllViews()
+        pattern_lock_id.initDots()
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

@@ -1,0 +1,61 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:title="Pattern settings">
+
+        <!-- TODO: Set onclick listener-->
+        <Preference
+            android:title="Reset"
+            android:key="reset_btn"
+            android:summary="reset current pattern"/>
+
+        <SeekBarPreference
+            android:key="col_number"
+            app:title="Number of columns"
+            app:showSeekBarValue="true"
+            app:defaultValue="3"
+            app:min="1"
+            android:max="10"
+            app:enabled="false"/>
+
+        <SeekBarPreference
+            android:key="row_number"
+            app:title="Number of rows"
+            app:showSeekBarValue="true"
+            app:defaultValue="3"
+            app:min="1"
+            android:max="10"
+            app:enabled="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="Appearance">
+
+        <!-- TODO: Choose color of selected dots -->
+
+        <!-- TODO: Choose color of line -->
+
+
+        <SwitchPreference
+            android:key="display_indicator"
+            app:title="Display indicator"
+            app:defaultValue="false"/>
+
+        <SwitchPreference
+            android:key="background"
+            app:title="Fill dot background"
+            app:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="Info">
+
+        <Preference
+            android:title="About app"
+            android:key="about_btn"
+            android:summary="open about fragment"/>
+        <!-- TODO: Set onclick listener-->
+    </PreferenceCategory>
+</PreferenceScreen>

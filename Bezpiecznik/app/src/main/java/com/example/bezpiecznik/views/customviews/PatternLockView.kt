@@ -11,6 +11,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.bezpiecznik.R
+import com.example.bezpiecznik.models.enums.DotState
 import com.example.bezpiecznik.viewmodels.PatternLockViewModel
 import com.example.bezpiecznik.viewmodels.PatternLockViewState
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
@@ -27,8 +28,15 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     private var lastPointX = 0f
     private var lastPaintY = 0f
 
-    private var patternRowCount = 0
-    private var patternColCount = 0
+    var patternRowCount = 0
+    var patternColCount = 0
+
+    var regularDotColor = 0
+    var selectedDotColor = 0
+    var errorDotColor = 0
+
+    private var errorDuration = 400
+
 
     init {
         val attributes = context.obtainStyledAttributes(attributeSet, R.styleable.PatternLock)
@@ -80,6 +88,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     private fun notifyCellSelected(cell: CellView) {
         selectedCells.add(cell)
+
+        cell.setState(DotState.SELECTED)
         val center = cell.getCenter()
         if (selectedCells.size == 1) {
                 patternPath.moveTo(center.x.toFloat(), center.y.toFloat())
@@ -97,14 +107,19 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
             }
         }
 
-    private fun initDots() {
+    fun initDots() {
         for(i in 0 until patternRowCount) {
             for(j in 0 until patternColCount) {
-                val cell = CellView(context, patternColCount)
+                val cell = CellView(context, patternColCount,i * columnCount + j)
                 addView(cell)
                 cells.add(cell)
             }
         }
+    }
+
+    override fun removeAllViews() {
+        super.removeAllViews()
+        cells.clear()
     }
 
     private fun initPathPaint() {
@@ -114,11 +129,16 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         patternPaint.strokeJoin = Paint.Join.ROUND
         patternPaint.strokeCap = Paint.Cap.ROUND
         patternPaint.strokeWidth = 6f
-        patternPaint.color = Color.BLACK
+        patternPaint.color = Color.GREEN
     }
 
-    private fun reset() {
+    fun reset() {
+        for(cell in selectedCells) {
+            cell.reset()
+        }
+
         selectedCells.clear()
+        patternPaint.color = Color.GREEN
         patternPath.reset()
 
         lastPointX = 0f
@@ -147,9 +167,22 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         lastPointX = 0f
         lastPaintY = 0f
 
-        reset()
+        onError()
     }
 
+    private fun onError(){
+        for (cell in selectedCells) {
+            cell.setState(DotState.ERROR)
+        }
+        patternPaint.color = Color.RED
+        invalidate()
+
+        postDelayed({
+            reset()
+        }, errorDuration.toLong())
+    }
+
+    // ViewModel
     override val viewModel = PatternLockViewModel()
 
     override fun onLifecycleOwnerAttached(lifecycleOwner: LifecycleOwner) {
@@ -157,9 +190,10 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     }
 
     private fun observeLiveData(lifecycleOwner: LifecycleOwner) {
-        viewModel.getLiveData().observe(lifecycleOwner, Observer {
-            setBackgroundColor(Color.parseColor(it))
-        })
+//        viewModel.getLiveData().observe(lifecycleOwner, Observer {
+//            setBackgroundColor(Color.parseColor(it))
+//        })
+
     }
 
 }
