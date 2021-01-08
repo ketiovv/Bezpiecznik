@@ -22,4 +22,17 @@
     <string name="duration">Duration:</string>
     <string name="positive_attempts">Positive attempts:</string>
     <string name="attempts">All attempts:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Sharded Preferences key -->
+    <string name="userID">com.example.bezpiecznik.userID</string>
+    <string name="binID">com.example.bezpiecznik.binID</string>
+
+    <!-- Create user fragment  -->
+    <string name="hello">Hello!</string>
+    <string name="fill_information">Please fill this form:</string>
+    <string name="whats_your_name">Whats your name?</string>
+    <string name="master_password">Set your master password:</string>
+
 </resources>

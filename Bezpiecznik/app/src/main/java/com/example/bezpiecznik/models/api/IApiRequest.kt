@@ -21,4 +21,12 @@ interface IApiRequest {
     @GET("b/5fdb358c7f44d007fbf98c7a")
     fun getJson() : Call<User>
 
+    @Headers(
+        "Content-Type: application/json",
+        "secret-key: $2b$10\$SKWkhv2HZAovsIicIy/61eeFcJGrHgoev6y5zDriR4us.vHiFmRve",
+        "private: true",
+        "collection-id: 5ff8c26361f92720434a5530"
+    )
+    @POST("b")
+    fun addUser(@Body user: User): Call<Response>
 }

@@ -33,4 +33,9 @@
         android:id="@+id/aboutFragment"
         android:name="com.example.bezpiecznik.views.AboutFragment"
         android:label="AboutFragment" />
+    <fragment
+        android:id="@+id/createUserFragment"
+        android:name="com.example.bezpiecznik.views.CreateUserFragment"
+        android:label="fragment_create_user"
+        tools:layout="@layout/fragment_create_user" />
 </navigation>
