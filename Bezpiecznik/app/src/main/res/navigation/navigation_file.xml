@@ -33,4 +33,14 @@
             android:id="@+id/action_settings2Fragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/createUserFragment"
+        android:name="com.example.bezpiecznik.views.CreateUserFragment"
+        android:label="fragment_create_user"
+        tools:layout="@layout/fragment_create_user" />
+    <fragment
+        android:id="@+id/loginUserFragment"
+        android:name="com.example.bezpiecznik.views.LoginUserFragment"
+        android:label="fragment_login_user"
+        tools:layout="@layout/fragment_login_user" />
 </navigation>

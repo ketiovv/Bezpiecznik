@@ -2,10 +2,7 @@ package com.example.bezpiecznik.models.api
 
 import com.example.bezpiecznik.models.entities.User
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface IApiRequest {
     @Headers(
@@ -18,8 +15,8 @@ interface IApiRequest {
     @Headers(
         "secret-key: $2b$10\$SKWkhv2HZAovsIicIy/61eeFcJGrHgoev6y5zDriR4us.vHiFmRve"
     )
-    @GET("b/5fdb358c7f44d007fbf98c7a")
-    fun getJson() : Call<User>
+    @GET("b/{id}")
+    fun getUser(@Path("id") id: String) : Call<User>
 
     @Headers(
         "Content-Type: application/json",

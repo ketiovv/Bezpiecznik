@@ -15,7 +15,7 @@ import com.example.bezpiecznik.models.entities.User
 import com.example.bezpiecznik.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_user.*
-import kotlinx.android.synthetic.main.fragment_settings.*
+
 
 class CreateUserFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel

@@ -8,6 +8,7 @@ import com.example.bezpiecznik.models.entities.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,7 +21,6 @@ class UserViewModel() : ViewModel() {
         .create(IApiRequest::class.java)
 
     fun createUser(name: String, masterPassword : String, saveToSPCallback:((u: User, id: String) -> Unit)){
-
         val userID: String = rand()
         val user = User(userID, name, masterPassword)
         GlobalScope.launch(Dispatchers.IO) {
@@ -34,8 +34,24 @@ class UserViewModel() : ViewModel() {
             else{
                 Log.d("api-connection","response failed")
             }
-
+        }
     }
+
+    fun getUser(binID: String, doneCallback: ((d: Boolean) -> Unit)){
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val response = api.getUser(binID).awaitResponse()
+            if (response.isSuccessful){
+                val data = response.body()
+                if(data != null){
+                    user = data
+                    doneCallback(true)
+                }
+            }
+            else{
+                Log.d("api-connection","response failed")
+            }
+        }
 
     }
 

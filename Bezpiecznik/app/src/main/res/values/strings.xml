@@ -35,4 +35,8 @@
     <string name="whats_your_name">Whats your name?</string>
     <string name="master_password">Set your master password:</string>
 
+    <!-- Login user fragment -->
+    <string name="enter_passwd">Please enter your master password.</string>
+    <string name="master_passwd">Master password:</string>
+
 </resources>

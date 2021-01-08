@@ -24,12 +24,15 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
 
         if(!sharedPref.contains(getString(R.string.userID))){
             bottomNavigationView.visibility = View.GONE
             navController.navigate(R.id.createUserFragment)
+        }
+        else{
+            bottomNavigationView.visibility = View.GONE
+            navController.navigate(R.id.loginUserFragment)
         }
 
     }
