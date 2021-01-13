@@ -13,8 +13,8 @@ import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.enums.DotState
 
 class CellView(context: Context,
-               var columnCount: Int,
-               var index: Int): View(context){
+               var dotNumber: Int,
+               var columnCount: Int): View(context){
     private var paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var state = DotState.REGULAR
 

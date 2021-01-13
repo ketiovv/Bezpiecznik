@@ -6,10 +6,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.enums.DotState
 import com.example.bezpiecznik.viewmodels.PatternLockViewModel
@@ -108,11 +108,13 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         }
 
     fun initDots() {
+        var numbering = 1
         for(i in 0 until patternRowCount) {
             for(j in 0 until patternColCount) {
-                val cell = CellView(context, patternColCount,i * columnCount + j)
+                val cell = CellView(context, numbering, patternColCount)
                 addView(cell)
                 cells.add(cell)
+                numbering++
             }
         }
     }
@@ -133,9 +135,15 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     }
 
     fun reset() {
+        // Lista intów dla Remika
+        val arrayOfSelectedDotsNumbers: ArrayList<Int> = ArrayList()
+
         for(cell in selectedCells) {
+            arrayOfSelectedDotsNumbers.add(cell.dotNumber)
             cell.reset()
         }
+
+        Log.d("test", arrayOfSelectedDotsNumbers.toString())
 
         selectedCells.clear()
         patternPaint.color = Color.GREEN
