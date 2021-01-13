@@ -4,20 +4,13 @@
     <PreferenceCategory
         app:title="Pattern settings">
 
-        <!-- TODO: Set onclick listener-->
-        <Preference
-            android:title="Reset"
-            android:key="reset_btn"
-            android:summary="reset current pattern"/>
-
         <SeekBarPreference
             android:key="col_number"
             app:title="Number of columns"
             app:showSeekBarValue="true"
             app:defaultValue="3"
             app:min="1"
-            android:max="10"
-            app:enabled="false"/>
+            android:max="10"/>
 
         <SeekBarPreference
             android:key="row_number"
@@ -25,8 +18,7 @@
             app:showSeekBarValue="true"
             app:defaultValue="3"
             app:min="1"
-            android:max="10"
-            app:enabled="false"/>
+            android:max="10"/>
     </PreferenceCategory>
 
     <PreferenceCategory
