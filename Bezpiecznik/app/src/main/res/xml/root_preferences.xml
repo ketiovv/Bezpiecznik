@@ -28,15 +28,19 @@
 
         <!-- TODO: Choose color of line -->
 
-
         <SwitchPreference
-            android:key="display_indicator"
-            app:title="Display indicator"
+            android:key="background"
+            app:title="Fill selected cell backgrounds"
             app:defaultValue="false"/>
 
         <SwitchPreference
-            android:key="background"
-            app:title="Fill dot background"
+            android:key="border"
+            app:title="Display border of selected cells"
+            app:defaultValue="false"/>
+
+        <SwitchPreference
+            android:key="indicator"
+            app:title="Display indicator of direction"
             app:defaultValue="false"/>
 
     </PreferenceCategory>

@@ -121,7 +121,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                                 numbering,
                                 patternColCount,
                                 sleepColor, selectedColor, veryStrongPatternColor,
-                                showCellBackground)
+                                showCellBackground, showBorder, showIndicator)
                 addView(cell)
                 cells.add(cell)
                 numbering++

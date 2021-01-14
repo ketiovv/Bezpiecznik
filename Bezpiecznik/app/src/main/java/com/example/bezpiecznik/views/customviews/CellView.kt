@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import com.example.bezpiecznik.models.enums.DotState
 
@@ -18,7 +19,9 @@ class CellView(context: Context,
                var selectedColor: Int,
                var passwordStrengthColor: Int,
 
-               var showCellBackground: Boolean): View(context){
+               var showCellBackground: Boolean,
+               var showBorder: Boolean,
+               var showIndicator: Boolean): View(context){
 
     private var paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var state = DotState.SLEEP
@@ -59,10 +62,17 @@ class CellView(context: Context,
             }
         }
 
+        if (showBorder){
+            Log.d("test","show border")
+        }
+
         paint.color = dotColor
         paint.style = Paint.Style.FILL
         canvas?.drawCircle(centerX.toFloat(), centerY.toFloat(), radius * radiusRation, paint)
 
+        if (showIndicator){
+            Log.d("test","show indi")
+        }
     }
 
     fun getRadius() : Int {
