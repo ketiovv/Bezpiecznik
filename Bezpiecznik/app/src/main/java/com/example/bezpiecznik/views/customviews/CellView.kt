@@ -2,21 +2,20 @@ package com.example.bezpiecznik.views.customviews
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.core.content.ContextCompat
-import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.enums.DotState
 
 class CellView(context: Context,
                var dotNumber: Int,
-               var columnCount: Int): View(context){
+               var columnCount: Int,
+               var sleepColor: Int,
+               var selectedColor: Int,
+               var passwordStrengthColor: Int): View(context){
     private var paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var state = DotState.REGULAR
+    private var state = DotState.SLEEP
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -29,9 +28,9 @@ class CellView(context: Context,
         super.onDraw(canvas)
 
         when(state){
-            DotState.REGULAR -> drawDot(canvas,null, Color.GRAY)
-            DotState.SELECTED -> drawDot(canvas,null, Color.GREEN)
-            DotState.ERROR -> drawDot(canvas,null, Color.RED)
+            DotState.SLEEP -> drawDot(canvas,null, sleepColor)
+            DotState.SELECTED -> drawDot(canvas,null, selectedColor)
+            DotState.AFTER -> drawDot(canvas,null, passwordStrengthColor)
         }
     }
 
@@ -63,7 +62,7 @@ class CellView(context: Context,
     }
 
     fun reset() {
-        setState(DotState.REGULAR)
+        setState(DotState.SLEEP)
     }
 
 }

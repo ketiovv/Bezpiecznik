@@ -31,9 +31,9 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var patternRowCount = 0
     var patternColCount = 0
 
-    var regularDotColor = 0
-    var selectedDotColor = 0
-    var errorDotColor = 0
+    private var sleepColor = Color.LTGRAY
+    private var selectedColor = Color.DKGRAY
+    private var veryStrongPatternColor = Color.GREEN
 
     private var errorDuration = 400
 
@@ -111,7 +111,11 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         var numbering = 1
         for(i in 0 until patternRowCount) {
             for(j in 0 until patternColCount) {
-                val cell = CellView(context, numbering, patternColCount)
+                val cell =
+                        CellView(context,
+                                numbering,
+                                patternColCount,
+                                sleepColor, selectedColor, veryStrongPatternColor)
                 addView(cell)
                 cells.add(cell)
                 numbering++
@@ -131,7 +135,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         patternPaint.strokeJoin = Paint.Join.ROUND
         patternPaint.strokeCap = Paint.Cap.ROUND
         patternPaint.strokeWidth = 6f
-        patternPaint.color = Color.GREEN
+        patternPaint.color = selectedColor
     }
 
     fun reset() {
@@ -143,10 +147,17 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
             cell.reset()
         }
 
+        // Tutaj wpuścić arrayOfSelectedDotsNumbers w algorytm, który:
+        // - pokaże informacje zwrotną: toast?
+        //   w sumie w zwiazku z sila hasla mozna potem ustawic ten kolor kropek(ktory
+        //   aktualnie tam jest zielony) wiadomo ocb - silne zielony, srednie pomaranczowy
+        //   slabe czerwony) no i kozackie by to bylo
+        // - poda array(może w innej formie?) do serializacji na repo
+
         Log.d("test", arrayOfSelectedDotsNumbers.toString())
 
         selectedCells.clear()
-        patternPaint.color = Color.GREEN
+        patternPaint.color = selectedColor
         patternPath.reset()
 
         lastPointX = 0f
@@ -167,8 +178,10 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     private fun isSelected(view: View, x: Int, y: Int) : Boolean {
         val innerPadding = view.width * 0.2f
 
-        return x >= view.left + innerPadding && x <= view.right - innerPadding &&
-                y >= view.top + innerPadding && y <= view.bottom - innerPadding
+        return  x >= view.left + innerPadding &&
+                x <= view.right - innerPadding &&
+                y >= view.top + innerPadding &&
+                y <= view.bottom - innerPadding
     }
 
     private fun onFinish() {
@@ -180,9 +193,9 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     private fun onError(){
         for (cell in selectedCells) {
-            cell.setState(DotState.ERROR)
+            cell.setState(DotState.AFTER)
         }
-        patternPaint.color = Color.RED
+        patternPaint.color = veryStrongPatternColor
         invalidate()
 
         postDelayed({
