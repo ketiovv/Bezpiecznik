@@ -49,11 +49,13 @@ class TestsFragment : Fragment() {
 
         var col = sp.getInt("col_number",3)
         var row = sp.getInt("row_number",3)
+        var background = sp.getBoolean("background",false)
 
         pattern_lock_id.columnCount = col
         pattern_lock_id.rowCount = row
         pattern_lock_id.patternColCount = col
         pattern_lock_id.patternRowCount = row
+        pattern_lock_id.showCellBackground = background
 
         pattern_lock_id.reset()
         pattern_lock_id.removeAllViews()

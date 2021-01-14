@@ -2,8 +2,10 @@ package com.example.bezpiecznik.views.customviews
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.example.bezpiecznik.models.enums.DotState
@@ -11,11 +13,17 @@ import com.example.bezpiecznik.models.enums.DotState
 class CellView(context: Context,
                var dotNumber: Int,
                var columnCount: Int,
+
                var sleepColor: Int,
                var selectedColor: Int,
-               var passwordStrengthColor: Int): View(context){
+               var passwordStrengthColor: Int,
+
+               var showCellBackground: Boolean): View(context){
+
     private var paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var state = DotState.SLEEP
+    private var cellBackground: Drawable? = ColorDrawable(sleepColor)
+
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -29,20 +37,32 @@ class CellView(context: Context,
 
         when(state){
             DotState.SLEEP -> drawDot(canvas,null, sleepColor)
-            DotState.SELECTED -> drawDot(canvas,null, selectedColor)
-            DotState.AFTER -> drawDot(canvas,null, passwordStrengthColor)
+            DotState.SELECTED -> drawDot(canvas,cellBackground, selectedColor)
+            DotState.AFTER -> drawDot(canvas,cellBackground, passwordStrengthColor)
         }
     }
 
     fun drawDot(canvas: Canvas?, background: Drawable?, dotColor: Int, radiusRation: Float = 0.3f){
         var radius = getRadius()
-        var centerX = width/2
-        var centerY = height/2
-        
+        var centerX = width / 2
+        var centerY = height / 2
+
+        // TODO: Make background smaller
+        if (showCellBackground){
+            if (background is ColorDrawable) {
+                paint.color = background.color
+                paint.style = Paint.Style.FILL
+                canvas?.drawCircle(centerX.toFloat(), centerY.toFloat(), radius.toFloat(), paint)
+            } else {
+                background?.setBounds(paddingLeft, paddingTop, width - paddingRight, height - paddingBottom)
+                background?.draw(canvas!!)
+            }
+        }
+
         paint.color = dotColor
         paint.style = Paint.Style.FILL
-
         canvas?.drawCircle(centerX.toFloat(), centerY.toFloat(), radius * radiusRation, paint)
+
     }
 
     fun getRadius() : Int {

@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -31,9 +32,13 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var patternRowCount = 0
     var patternColCount = 0
 
-    private var sleepColor = Color.LTGRAY
-    private var selectedColor = Color.DKGRAY
-    private var veryStrongPatternColor = Color.GREEN
+    var sleepColor = Color.LTGRAY
+    var selectedColor = Color.DKGRAY
+    var veryStrongPatternColor = Color.GREEN
+
+    var showIndicator = false
+    var showCellBackground = false
+    var showBorder = false
 
     private var errorDuration = 400
 
@@ -115,7 +120,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                         CellView(context,
                                 numbering,
                                 patternColCount,
-                                sleepColor, selectedColor, veryStrongPatternColor)
+                                sleepColor, selectedColor, veryStrongPatternColor,
+                                showCellBackground)
                 addView(cell)
                 cells.add(cell)
                 numbering++
