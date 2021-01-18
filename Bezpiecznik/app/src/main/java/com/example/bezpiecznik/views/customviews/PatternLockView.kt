@@ -27,7 +27,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     private var patternPath = Path()
 
     private var lastPointX = 0f
-    private var lastPaintY = 0f
+    private var lastPointY = 0f
 
     var patternRowCount = 0
     var patternColCount = 0
@@ -35,6 +35,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var sleepColor = Color.LTGRAY
     var selectedColor = Color.DKGRAY
     var veryStrongPatternColor = Color.GREEN
+
+    var border: Drawable? = null
 
     var showIndicator = false
     var showCellBackground = false
@@ -48,6 +50,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
         patternRowCount = attributes.getInteger(R.styleable.PatternLock_pattern_row_count, 3)
         patternColCount = attributes.getInteger(R.styleable.PatternLock_pattern_col_count, 3)
+
+        border = attributes.getDrawable(R.styleable.PatternLock_border_black)
         attributes.recycle()
 
         rowCount = patternRowCount
@@ -86,7 +90,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         }
 
         lastPointX = event.x
-        lastPaintY = event.y
+        lastPointY = event.y
 
         invalidate()
     }
@@ -97,20 +101,55 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         cell.setState(DotState.SELECTED)
         val center = cell.getCenter()
         if (selectedCells.size == 1) {
-                patternPath.moveTo(center.x.toFloat(), center.y.toFloat())
+            patternPath.moveTo(center.x.toFloat(), center.y.toFloat())
         } else {
+            if(!showIndicator){
                 patternPath.lineTo(center.x.toFloat(), center.y.toFloat())
+            }else{
+                var previousCell = selectedCells[selectedCells.size - 2]
+                var previousCellCenter = previousCell.getCenter()
+                var diffX = center.x - previousCellCenter.x
+                var diffY = center.y - previousCellCenter.y
+                var radius = cell.getRadius()
+                var length = Math.sqrt((diffX * diffX + diffY * diffY).toDouble())
+
+                patternPath.moveTo((previousCellCenter.x + radius * diffX / length).toFloat(), (previousCellCenter.y + radius * diffY / length).toFloat())
+                patternPath.lineTo((center.x - radius * diffX / length).toFloat(), (center.y - radius * diffY / length).toFloat())
+
+                val degree = Math.toDegrees(Math.atan2(diffY.toDouble(), diffX.toDouble())) + 90
+                previousCell.setDegree(degree.toFloat())
+                previousCell.invalidate()
+            }
         }
     }
 
     override fun dispatchDraw(canvas: Canvas?) {
         super.dispatchDraw(canvas)
         canvas?.drawPath(patternPath, patternPaint)
-        if (selectedCells.size > 0 && lastPointX > 0 && lastPaintY > 0) {
+
+        if (selectedCells.size > 0 && lastPointX > 0 && lastPointY > 0) {
+            if (!showIndicator){
                 val center = selectedCells[selectedCells.size - 1].getCenter()
-                canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPaintY, patternPaint)
+                canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPointY, patternPaint)
+            } else{
+                var lastCell = selectedCells[selectedCells.size - 1]
+                var lastCellCenter = lastCell.getCenter()
+                var radius = lastCell.getRadius()
+
+                if (!(lastPointX >= lastCellCenter.x - radius &&
+                                lastPointX <= lastCellCenter.x + radius &&
+                                lastPointY >= lastCellCenter.y - radius &&
+                                lastPointY <= lastCellCenter.y + radius)) {
+                    var diffX = lastPointX - lastCellCenter.x
+                    var diffY = lastPointY - lastCellCenter.y
+                    var length = Math.sqrt((diffX * diffX + diffY * diffY).toDouble())
+                    canvas?.drawLine((lastCellCenter.x + radius * diffX / length).toFloat(),
+                            (lastCellCenter.y + radius * diffY / length).toFloat(),
+                            lastPointX, lastPointY, patternPaint)
+                }
             }
         }
+    }
 
     fun initDots() {
         var numbering = 1
@@ -121,7 +160,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                                 numbering,
                                 patternColCount,
                                 sleepColor, selectedColor, veryStrongPatternColor,
-                                showCellBackground, showBorder, showIndicator)
+                                showCellBackground, showBorder, showIndicator,
+                                border)
                 addView(cell)
                 cells.add(cell)
                 numbering++
@@ -167,7 +207,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         patternPath.reset()
 
         lastPointX = 0f
-        lastPaintY = 0f
+        lastPointY = 0f
 
         invalidate()
     }
@@ -192,7 +232,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     private fun onFinish() {
         lastPointX = 0f
-        lastPaintY = 0f
+        lastPointY = 0f
 
         onError()
     }
