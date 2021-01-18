@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.view.setPadding
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.enums.DotState
@@ -162,6 +163,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                                 sleepColor, selectedColor, veryStrongPatternColor,
                                 showCellBackground, showBorder, showIndicator,
                                 border)
+                var cellPadding = 72 / columnCount
+                cell.setPadding(cellPadding, cellPadding, cellPadding, cellPadding)
                 addView(cell)
                 cells.add(cell)
                 numbering++

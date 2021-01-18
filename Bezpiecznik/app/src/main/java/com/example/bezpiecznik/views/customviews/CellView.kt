@@ -34,7 +34,7 @@ class CellView(context: Context,
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var cellWidth = MeasureSpec.getSize(widthMeasureSpec) / columnCount
         var cellHeight = cellWidth
-        setMeasuredDimension(cellWidth,cellHeight)
+        setMeasuredDimension(cellWidth, cellHeight)
     }
 
     override fun onDraw(canvas: Canvas?) {
