@@ -37,7 +37,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     var veryWeakPatternColor = Color.parseColor("#EC204F")
     var weakPatternColor = Color.parseColor("#FF922C")
-    var mediumPatternColor = Color.parseColor("FEED47")
+    var mediumPatternColor = Color.parseColor("#FEED47")
     var strongPatternColor = Color.parseColor("#8DE45F")
     var veryStrongPatternColor = Color.parseColor("#2ECF03")
 
