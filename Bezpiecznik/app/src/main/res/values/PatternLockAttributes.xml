@@ -3,5 +3,11 @@
     <declare-styleable name="PatternLock">
         <attr name="pattern_row_count" format="integer"/>
         <attr name="pattern_col_count" format="integer"/>
+        <attr name="border_black" format="color|reference"/>
     </declare-styleable>
+
+    <style name="PatternLockView">
+        <item name="border_black">@drawable/cell_with_border_black</item>
+    </style>
+
 </resources>
