@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.view.setPadding
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.enums.DotState
@@ -34,12 +35,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     var sleepColor = Color.LTGRAY
     var selectedColor = Color.DKGRAY
-
-    var veryWeakPatternColor = Color.parseColor("#EC204F")
-    var weakPatternColor = Color.parseColor("#FF922C")
-    var mediumPatternColor = Color.parseColor("FEED47")
-    var strongPatternColor = Color.parseColor("#8DE45F")
-    var veryStrongPatternColor = Color.parseColor("#2ECF03")
+    var veryStrongPatternColor = Color.GREEN
 
     var border: Drawable? = null
 
@@ -164,7 +160,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                         CellView(context,
                                 numbering,
                                 patternColCount,
-                                sleepColor, selectedColor,
+                                sleepColor, selectedColor, veryStrongPatternColor,
                                 showCellBackground, showBorder, showIndicator,
                                 border)
                 var cellPadding = 72 / columnCount
@@ -241,11 +237,14 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         lastPointX = 0f
         lastPointY = 0f
 
+        onError()
+    }
+
+    private fun onError(){
         for (cell in selectedCells) {
-            cell.setPatternStrengthColor(veryWeakPatternColor)
             cell.setState(DotState.AFTER)
         }
-        patternPaint.color = veryWeakPatternColor
+        patternPaint.color = veryStrongPatternColor
         invalidate()
 
         postDelayed({

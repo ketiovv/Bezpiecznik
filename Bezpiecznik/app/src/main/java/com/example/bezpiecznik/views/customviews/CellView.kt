@@ -14,6 +14,7 @@ class CellView(context: Context,
 
                var sleepColor: Int,
                var selectedColor: Int,
+               var passwordStrengthColor: Int,
 
                var showCellBackground: Boolean,
                var showBorder: Boolean,
@@ -23,7 +24,7 @@ class CellView(context: Context,
     private var paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var state = DotState.SLEEP
     private var cellBackground: Drawable? = ColorDrawable(sleepColor)
-    private var patternStrengthColor: Int = Color.parseColor("#EC204F")
+
 
     private var degree: Float = -1f
     private var indicatorPath: Path = Path()
@@ -42,7 +43,7 @@ class CellView(context: Context,
         when(state){
             DotState.SLEEP -> drawDot(canvas,null,null, sleepColor)
             DotState.SELECTED -> drawDot(canvas, cellBackground, border, selectedColor)
-            DotState.AFTER -> drawDot(canvas, cellBackground, border, patternStrengthColor)
+            DotState.AFTER -> drawDot(canvas, cellBackground, border, passwordStrengthColor)
         }
     }
 
@@ -50,6 +51,8 @@ class CellView(context: Context,
         var radius = getRadius()
         var centerX = width / 2
         var centerY = height / 2
+
+        // TODO: Make cell smaller
 
         if (showCellBackground){
             if (background is ColorDrawable) {
@@ -95,7 +98,7 @@ class CellView(context: Context,
             if (state == DotState.SELECTED) {
                 paint.color = selectedColor
             } else {
-                paint.color = patternStrengthColor
+                paint.color = Color.GREEN
             }
 
             paint.style = Paint.Style.FILL
@@ -125,10 +128,6 @@ class CellView(context: Context,
 
     fun setDegree(newDegree: Float){
         degree = newDegree
-    }
-
-    fun setPatternStrengthColor(color: Int){
-        patternStrengthColor = color
     }
 
     fun reset() {
