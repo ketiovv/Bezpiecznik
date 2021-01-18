@@ -10,8 +10,11 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.setPadding
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
+import com.example.bezpiecznik.models.Counter
 import com.example.bezpiecznik.models.enums.DotState
 import com.example.bezpiecznik.viewmodels.PatternLockViewModel
 import com.example.bezpiecznik.viewmodels.PatternLockViewState
@@ -192,22 +195,9 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     }
 
     fun reset() {
-        // Lista intów dla Remika
-        val arrayOfSelectedDotsNumbers: ArrayList<Int> = ArrayList()
-
         for(cell in selectedCells) {
-            arrayOfSelectedDotsNumbers.add(cell.dotNumber)
             cell.reset()
         }
-
-        // Tutaj wpuścić arrayOfSelectedDotsNumbers w algorytm, który:
-        // - pokaże informacje zwrotną: toast?
-        //   w sumie w zwiazku z sila hasla mozna potem ustawic ten kolor kropek(ktory
-        //   aktualnie tam jest zielony) wiadomo ocb - silne zielony, srednie pomaranczowy
-        //   slabe czerwony) no i kozackie by to bylo
-        // - poda array(może w innej formie?) do serializacji na repo
-
-        Log.d("test", arrayOfSelectedDotsNumbers.toString())
 
         selectedCells.clear()
         patternPaint.color = selectedColor
@@ -241,11 +231,26 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         lastPointX = 0f
         lastPointY = 0f
 
+        val arrayOfSelectedDotsNumbers: ArrayList<Int> = ArrayList()
+
         for (cell in selectedCells) {
+            arrayOfSelectedDotsNumbers.add(cell.dotNumber)
             cell.setPatternStrengthColor(veryWeakPatternColor)
             cell.setState(DotState.AFTER)
         }
+        Log.d("test", arrayOfSelectedDotsNumbers.toString())
+
+        if(arrayOfSelectedDotsNumbers.size > 0){
+            val array = arrayOfSelectedDotsNumbers.toTypedArray()
+
+            val res = Counter(patternRowCount, patternColCount, array)
+            println(res.verbalScaleResult(res.printer()))
+            val strength = res.verbalScaleResult(res.printer())
+            Log.d("test", strength.toString())
+        }
+
         patternPaint.color = veryWeakPatternColor
+
         invalidate()
 
         postDelayed({
