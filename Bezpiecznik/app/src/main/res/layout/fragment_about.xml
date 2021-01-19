@@ -11,13 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/about"
-        android:textSize="30sp"
+        android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.023"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvGithub"
@@ -29,7 +30,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.221"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        android:textColor="#00004d"
+        />
 
     <TextView
         android:id="@+id/tvPolsl"
@@ -41,7 +44,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_bias="0.4"
+        android:textColor="#00004d"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -75,7 +79,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvAuthors"
@@ -87,7 +92,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.101"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAppDesc" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAppDesc"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvWK"
@@ -99,7 +105,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.197"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAuthors" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAuthors"
+        android:textColor="#00004d"/>
 
     <TextView
         android:id="@+id/tvKL"
@@ -110,7 +117,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.179"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWK" />
+        app:layout_constraintTop_toBottomOf="@+id/tvWK"
+        android:textColor="#00004d"/>
 
     <TextView
         android:id="@+id/tvRD"
@@ -121,6 +129,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.212"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvKL" />
+        app:layout_constraintTop_toBottomOf="@+id/tvKL"
+        android:textColor="#00004d"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

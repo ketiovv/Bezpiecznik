@@ -46,6 +46,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:title="Security">
+
+        <!-- TODO: Change master password? -->
+
+        <SwitchPreference
+            android:key="invisible_drawing"
+            app:title="Invisible drawing"
+            app:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:title="Info">
 
         <Preference

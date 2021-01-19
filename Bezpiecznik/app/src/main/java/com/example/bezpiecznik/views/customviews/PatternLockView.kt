@@ -8,39 +8,61 @@ import android.graphics.Path
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
+import com.example.bezpiecznik.models.Counter
 import com.example.bezpiecznik.models.enums.DotState
+import com.example.bezpiecznik.models.enums.PatternStrength
 import com.example.bezpiecznik.viewmodels.PatternLockViewModel
 import com.example.bezpiecznik.viewmodels.PatternLockViewState
+import com.example.bezpiecznik.views.TestsFragment
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
-import java.util.ArrayList
+import java.util.*
+import kotlin.math.sqrt
+
 
 class PatternLockView(context: Context, attributeSet: AttributeSet)
     : MvvmGridLayout<PatternLockViewState, PatternLockViewModel>(context, attributeSet) {
     private var cells = ArrayList<CellView>()
     private var selectedCells = ArrayList<CellView>()
 
+
     private var patternPaint = Paint()
     private var patternPath = Path()
 
     private var lastPointX = 0f
-    private var lastPaintY = 0f
+    private var lastPointY = 0f
 
     var patternRowCount = 0
     var patternColCount = 0
 
     var sleepColor = Color.LTGRAY
     var selectedColor = Color.DKGRAY
-    var veryStrongPatternColor = Color.GREEN
+
+    //TODO: move to colors xml?
+    var veryWeakPatternColor = Color.parseColor("#EC204F")
+    var weakPatternColor = Color.parseColor("#FF922C")
+    var mediumPatternColor = Color.parseColor("#FEED47")
+    var strongPatternColor = Color.parseColor("#8DE45F")
+    var veryStrongPatternColor = Color.parseColor("#2ECF03")
+
+    var border: Drawable? = null
 
     var showIndicator = false
     var showCellBackground = false
     var showBorder = false
 
-    private var errorDuration = 400
+    var invisibleDrawing = false
+
+    var drawAbility = true
+
+    // TODO: adjust in preferences
+    private var previewTimeAfterDrawing = 1000
+
 
 
     init {
@@ -48,6 +70,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
         patternRowCount = attributes.getInteger(R.styleable.PatternLock_pattern_row_count, 3)
         patternColCount = attributes.getInteger(R.styleable.PatternLock_pattern_col_count, 3)
+
+        border = attributes.getDrawable(R.styleable.PatternLock_border_black)
         attributes.recycle()
 
         rowCount = patternRowCount
@@ -58,6 +82,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (!drawAbility) return false
+
         when(event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 val hitCell = getHitCell(event.x.toInt(), event.y.toInt())
@@ -77,6 +103,40 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         return true
     }
 
+    override fun dispatchDraw(canvas: Canvas?) {
+        super.dispatchDraw(canvas)
+        if (invisibleDrawing) return
+        canvas?.drawPath(patternPath, patternPaint)
+
+        if (selectedCells.size > 0 && lastPointX > 0 && lastPointY > 0) {
+            if (!showIndicator){
+                val center = selectedCells[selectedCells.size - 1].getCenter()
+                canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPointY, patternPaint)
+            } else{
+                val lastCell = selectedCells[selectedCells.size - 1]
+                val lastCellCenter = lastCell.getCenter()
+                val radius = lastCell.getRadius()
+
+                if (!(lastPointX >= lastCellCenter.x - radius &&
+                                lastPointX <= lastCellCenter.x + radius &&
+                                lastPointY >= lastCellCenter.y - radius &&
+                                lastPointY <= lastCellCenter.y + radius)) {
+                    val diffX = lastPointX - lastCellCenter.x
+                    val diffY = lastPointY - lastCellCenter.y
+                    val length = sqrt((diffX * diffX + diffY * diffY).toDouble())
+                    canvas?.drawLine((lastCellCenter.x + radius * diffX / length).toFloat(),
+                            (lastCellCenter.y + radius * diffY / length).toFloat(),
+                            lastPointX, lastPointY, patternPaint)
+                }
+            }
+        }
+    }
+
+    override fun removeAllViews() {
+        super.removeAllViews()
+        cells.clear()
+    }
+
     private fun handleActionMove(event: MotionEvent) {
         val hitCell = getHitCell(event.x.toInt(), event.y.toInt())
         if (hitCell != null) {
@@ -86,7 +146,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         }
 
         lastPointX = event.x
-        lastPaintY = event.y
+        lastPointY = event.y
 
         invalidate()
     }
@@ -94,23 +154,48 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     private fun notifyCellSelected(cell: CellView) {
         selectedCells.add(cell)
 
+        if (invisibleDrawing) return
+
         cell.setState(DotState.SELECTED)
         val center = cell.getCenter()
         if (selectedCells.size == 1) {
-                patternPath.moveTo(center.x.toFloat(), center.y.toFloat())
+            patternPath.moveTo(center.x.toFloat(), center.y.toFloat())
         } else {
+            if(!showIndicator){
                 patternPath.lineTo(center.x.toFloat(), center.y.toFloat())
+            }else{
+                val previousCell = selectedCells[selectedCells.size - 2]
+                val previousCellCenter = previousCell.getCenter()
+                val diffX = center.x - previousCellCenter.x
+                val diffY = center.y - previousCellCenter.y
+                val radius = cell.getRadius()
+                val length = sqrt((diffX * diffX + diffY * diffY).toDouble())
+
+                patternPath.moveTo((previousCellCenter.x + radius * diffX / length).toFloat(), (previousCellCenter.y + radius * diffY / length).toFloat())
+                patternPath.lineTo((center.x - radius * diffX / length).toFloat(), (center.y - radius * diffY / length).toFloat())
+
+                val degree = Math.toDegrees(Math.atan2(diffY.toDouble(), diffX.toDouble())) + 90
+                previousCell.setDegree(degree.toFloat())
+                previousCell.invalidate()
+            }
         }
     }
 
-    override fun dispatchDraw(canvas: Canvas?) {
-        super.dispatchDraw(canvas)
-        canvas?.drawPath(patternPath, patternPaint)
-        if (selectedCells.size > 0 && lastPointX > 0 && lastPaintY > 0) {
-                val center = selectedCells[selectedCells.size - 1].getCenter()
-                canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPaintY, patternPaint)
-            }
+    fun reset() {
+        for(cell in selectedCells) {
+            cell.reset()
         }
+
+        selectedCells.clear()
+        patternPaint.color = selectedColor
+        patternPath.reset()
+
+//        lastPointX = 0f
+//        lastPointY = 0f
+
+        drawAbility = true
+        invalidate()
+    }
 
     fun initDots() {
         var numbering = 1
@@ -120,18 +205,16 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                         CellView(context,
                                 numbering,
                                 patternColCount,
-                                sleepColor, selectedColor, veryStrongPatternColor,
-                                showCellBackground, showBorder, showIndicator)
+                                sleepColor, selectedColor,
+                                showCellBackground, showBorder, showIndicator,
+                                border)
+                val cellPadding = 72 / columnCount
+                cell.setPadding(cellPadding, cellPadding, cellPadding, cellPadding)
                 addView(cell)
                 cells.add(cell)
                 numbering++
             }
         }
-    }
-
-    override fun removeAllViews() {
-        super.removeAllViews()
-        cells.clear()
     }
 
     private fun initPathPaint() {
@@ -142,34 +225,6 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         patternPaint.strokeCap = Paint.Cap.ROUND
         patternPaint.strokeWidth = 6f
         patternPaint.color = selectedColor
-    }
-
-    fun reset() {
-        // Lista intów dla Remika
-        val arrayOfSelectedDotsNumbers: ArrayList<Int> = ArrayList()
-
-        for(cell in selectedCells) {
-            arrayOfSelectedDotsNumbers.add(cell.dotNumber)
-            cell.reset()
-        }
-
-        // Tutaj wpuścić arrayOfSelectedDotsNumbers w algorytm, który:
-        // - pokaże informacje zwrotną: toast?
-        //   w sumie w zwiazku z sila hasla mozna potem ustawic ten kolor kropek(ktory
-        //   aktualnie tam jest zielony) wiadomo ocb - silne zielony, srednie pomaranczowy
-        //   slabe czerwony) no i kozackie by to bylo
-        // - poda array(może w innej formie?) do serializacji na repo
-
-        Log.d("test", arrayOfSelectedDotsNumbers.toString())
-
-        selectedCells.clear()
-        patternPaint.color = selectedColor
-        patternPath.reset()
-
-        lastPointX = 0f
-        lastPaintY = 0f
-
-        invalidate()
     }
 
     private fun getHitCell(x: Int, y: Int) : CellView? {
@@ -192,24 +247,61 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     private fun onFinish() {
         lastPointX = 0f
-        lastPaintY = 0f
+        lastPointY = 0f
 
-        onError()
-    }
-
-    private fun onError(){
-        for (cell in selectedCells) {
-            cell.setState(DotState.AFTER)
+        val strength = getPatternStrength()
+        if (!invisibleDrawing){
+            setColorAfterDrawing(getColorByPatternStrength(strength))
         }
-        patternPaint.color = veryStrongPatternColor
+
+        drawAbility = false
         invalidate()
 
         postDelayed({
             reset()
-        }, errorDuration.toLong())
+        }, previewTimeAfterDrawing.toLong())
+    }
+
+    private fun getColorByPatternStrength(strength: PatternStrength):Int {
+        return when(strength){
+            PatternStrength.VERY_STRONG -> veryStrongPatternColor
+            PatternStrength.STRONG -> strongPatternColor
+            PatternStrength.MEDIUM -> mediumPatternColor
+            PatternStrength.WEAK -> weakPatternColor
+            else -> veryWeakPatternColor
+        }
+    }
+
+    private fun setColorAfterDrawing(color: Int){
+        for (cell in selectedCells) {
+            cell.setPatternStrengthColor(color)
+            cell.setState(DotState.AFTER)
+        }
+        patternPaint.color = color
+    }
+
+    private fun getPatternStrength(): PatternStrength{
+        val arrayOfSelectedDotsNumbers: ArrayList<Int> = ArrayList()
+
+        for (cell in selectedCells) {
+            arrayOfSelectedDotsNumbers.add(cell.dotNumber)
+        }
+
+        val array = arrayOfSelectedDotsNumbers.toTypedArray()
+        val res = Counter(patternRowCount, patternColCount, array)
+        val resPrint = res.printer()
+        val strength = res.verbalScaleResult(resPrint)
+
+
+        val toastStrength = res.verbalScaleResult(res.printer()).toString()
+        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength \nPoints:   $resPrint", Toast.LENGTH_LONG)
+        toast.show()
+
+        return strength
     }
 
     // ViewModel
+
     override val viewModel = PatternLockViewModel()
 
     override fun onLifecycleOwnerAttached(lifecycleOwner: LifecycleOwner) {
@@ -222,5 +314,4 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 //        })
 
     }
-
 }
