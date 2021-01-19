@@ -204,8 +204,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         patternPaint.color = selectedColor
         patternPath.reset()
 
-        lastPointX = 0f
-        lastPointY = 0f
+//        lastPointX = 0f
+//        lastPointY = 0f
 
         invalidate()
     }
