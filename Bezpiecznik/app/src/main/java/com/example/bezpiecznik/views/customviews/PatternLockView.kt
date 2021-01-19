@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.Counter
 import com.example.bezpiecznik.models.enums.DotState
+import com.example.bezpiecznik.models.enums.PatternStrength
 import com.example.bezpiecznik.viewmodels.PatternLockViewModel
 import com.example.bezpiecznik.viewmodels.PatternLockViewState
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
@@ -231,31 +232,50 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         lastPointX = 0f
         lastPointY = 0f
 
-        val arrayOfSelectedDotsNumbers: ArrayList<Int> = ArrayList()
-
-        for (cell in selectedCells) {
-            arrayOfSelectedDotsNumbers.add(cell.dotNumber)
-            cell.setPatternStrengthColor(veryWeakPatternColor)
-            cell.setState(DotState.AFTER)
-        }
-        Log.d("test", arrayOfSelectedDotsNumbers.toString())
-
-        if(arrayOfSelectedDotsNumbers.size > 0){
-            val array = arrayOfSelectedDotsNumbers.toTypedArray()
-
-            val res = Counter(patternRowCount, patternColCount, array)
-            println(res.verbalScaleResult(res.printer()))
-            val strength = res.verbalScaleResult(res.printer())
-            Log.d("test", strength.toString())
-        }
-
-        patternPaint.color = veryWeakPatternColor
+        val strength = getPatternStrength()
+        setColorAfterDrawing(getColorByPatternStrength(strength))
 
         invalidate()
 
         postDelayed({
             reset()
         }, errorDuration.toLong())
+    }
+
+    private fun getColorByPatternStrength(strength: PatternStrength):Int {
+        return when(strength){
+            PatternStrength.VERY_STRONG -> veryStrongPatternColor
+            PatternStrength.STRONG -> strongPatternColor
+            PatternStrength.MEDIUM -> mediumPatternColor
+            PatternStrength.WEAK -> weakPatternColor
+            else -> veryWeakPatternColor
+        }
+    }
+
+    private fun setColorAfterDrawing(color: Int){
+        for (cell in selectedCells) {
+            cell.setPatternStrengthColor(color)
+            cell.setState(DotState.AFTER)
+        }
+        patternPaint.color = color
+    }
+
+    private fun getPatternStrength(): PatternStrength{
+        val arrayOfSelectedDotsNumbers: ArrayList<Int> = ArrayList()
+
+        for (cell in selectedCells) {
+            arrayOfSelectedDotsNumbers.add(cell.dotNumber)
+        }
+        Log.d("test", arrayOfSelectedDotsNumbers.toString())
+
+        val array = arrayOfSelectedDotsNumbers.toTypedArray()
+
+        val res = Counter(patternRowCount, patternColCount, array)
+        println(res.verbalScaleResult(res.printer()))
+        val strength = res.verbalScaleResult(res.printer())
+        Log.d("test", strength.toString())
+
+        return strength
     }
 
     // ViewModel

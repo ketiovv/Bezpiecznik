@@ -69,7 +69,6 @@ class CellView(context: Context,
         canvas?.drawCircle(centerX.toFloat(), centerY.toFloat(), radius * radiusRation, paint)
 
         if (showIndicator && (state == DotState.SELECTED || state == DotState.AFTER)){
-            Log.d("test","show indi")
             drawIndicator(canvas)
         }
     }
