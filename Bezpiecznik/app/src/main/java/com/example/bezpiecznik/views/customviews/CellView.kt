@@ -12,6 +12,7 @@ import kotlin.math.min
 class CellView(context: Context,
                var dotNumber: Int,
                var columnCount: Int,
+               var rowCount:Int,
 
                var sleepColor: Int,
                var selectedColor: Int,
@@ -32,8 +33,10 @@ class CellView(context: Context,
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
         var cellWidth = MeasureSpec.getSize(widthMeasureSpec) / columnCount
         var cellHeight = cellWidth
+
         setMeasuredDimension(cellWidth, cellHeight)
     }
 

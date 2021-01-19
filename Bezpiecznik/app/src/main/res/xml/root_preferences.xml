@@ -9,7 +9,7 @@
             app:title="Number of columns"
             app:showSeekBarValue="true"
             app:defaultValue="3"
-            app:min="1"
+            app:min="3"
             android:max="10"/>
 
         <SeekBarPreference
@@ -17,7 +17,7 @@
             app:title="Number of rows"
             app:showSeekBarValue="true"
             app:defaultValue="3"
-            app:min="1"
+            app:min="3"
             android:max="10"/>
     </PreferenceCategory>
 

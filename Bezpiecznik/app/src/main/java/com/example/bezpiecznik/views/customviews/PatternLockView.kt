@@ -61,7 +61,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var drawAbility = true
 
     // TODO: adjust in preferences
-    private var previewTimeAfterDrawing = 1000
+    private var previewTimeAfterDrawing = 2000
 
 
 
@@ -204,7 +204,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                 val cell =
                         CellView(context,
                                 numbering,
-                                patternColCount,
+                                patternColCount, patternRowCount,
                                 sleepColor, selectedColor,
                                 showCellBackground, showBorder, showIndicator,
                                 border)
@@ -249,9 +249,18 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         lastPointX = 0f
         lastPointY = 0f
 
-        val strength = getPatternStrength()
-        if (!invisibleDrawing){
-            setColorAfterDrawing(getColorByPatternStrength(strength))
+        if (selectedCells.size < 3){
+            val toast = Toast.makeText(context, "The pattern length is at least 3", Toast.LENGTH_SHORT)
+            toast.show()
+            if (!invisibleDrawing){
+                setColorAfterDrawing(veryWeakPatternColor)
+            }
+        }
+        else{
+            val strength = getPatternStrength()
+            if (!invisibleDrawing){
+                setColorAfterDrawing(getColorByPatternStrength(strength))
+            }
         }
 
         drawAbility = false
@@ -294,7 +303,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
 
         val toastStrength = res.verbalScaleResult(res.printer()).toString()
-        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength \nPoints:   $resPrint", Toast.LENGTH_LONG)
+        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength \nPoints:   $resPrint", Toast.LENGTH_SHORT)
         toast.show()
 
         return strength
