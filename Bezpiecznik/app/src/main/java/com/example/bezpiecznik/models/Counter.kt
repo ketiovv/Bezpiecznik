@@ -15,24 +15,28 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
 
         val xd = neighborsDifference(neighborHorizontallyVertically(columns,c),neighborDiagonally(columns,c),rows,columns)
 
-        println("Ujemne punkty za długość kodu względem planszy: " + lengthRelative(rows,columns,c))
-        println("Punkty ujemne za sąsiadów: $xd")
-
         if(cornerStart(rows, columns, c))
             res -= 15
         if(diagonal1(rows,columns,c) || diagonal2(rows,columns,c) || diagonal1(rows,columns,rc) || diagonal2(rows,columns,rc))
             res -= 75
-        res -= if(horizontalLines(columns,c) || verticalLines(rows,columns,c) || horizontalLines(columns,rc) || verticalLines(rows,columns,rc))
-            (50 + xd)
         else{
-            if(shorterSide(rows,columns,c))
-                (40 + lengthRelative(rows,columns,c) + xd)
-            else{
-                if(longerSide(rows,columns,c))
-                    (35 + lengthRelative(rows,columns,c) + xd)
-                else
-                    (lengthRelative(rows,columns,c) + xd)
+            if(horizontalLines(columns,c) || verticalLines(rows,columns,c) || horizontalLines(columns,rc) || verticalLines(rows,columns,rc)){
+                res -= (40 + lengthRelative(rows,columns,c) + xd)
             }
+            else{
+                if(shorterSide(rows,columns,c)){
+                    res -= (25 + lengthRelative(rows,columns,c) + xd)
+                }
+                else{
+                    if(longerSide(rows,columns,c)){
+                        res -= (20 + lengthRelative(rows,columns,c) + xd)
+                    }
+                    else{
+                        res -= (lengthRelative(rows,columns,c) + xd)
+                    }
+                }
+            }
+
         }
         return res
     }
@@ -88,20 +92,28 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
 
     private fun diagonal1(rows: Int, columns: Int, code: Array<Int>): Boolean {
         var res = false
+        var ile = 0
         if(rows == columns && code.size == columns){
             for(i in 0 until rows){
-                res = code[i] == (rows + 1) * i + 1
+                if(code[i] == (rows + 1) * i + 1)
+                    ile += 1
             }
+            if(ile == rows)
+                res = true
         }
         return res
     }
 
     private fun diagonal2(rows: Int, columns: Int, code: Array<Int>): Boolean{
+        var ile = 0
         var res = false
         if(rows == columns && code.size == columns){
             for(i in 0 until rows){
-                res = code[i] == rows * (1 + i) - i
+                if(code[i] == rows * (1 + i) - i)
+                    ile += 1
             }
+            if(ile == rows)
+                res = true
         }
         return res
     }
@@ -109,7 +121,7 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
     private fun neighborHorizontallyVertically(columns: Int, code: Array<Int>): Int{
         var ile = 0
         for(i in 1 until code.size)
-            if (code[i] == code[i - 1] - 1 || code[i] == code[i - 1] + 1 || code[i] == code[i - 1] - columns || code[i] == code[i - 1] + columns)
+            if (code[i] == code[i - 1] - 1 || (code[i] == code[i - 1] + 1 && code[i]%columns != 1) || code[i] == code[i - 1] - columns || code[i] == code[i - 1] + columns)
                 ile++
         return ile
     }
@@ -150,6 +162,9 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
     }
 
     private fun neighborsDifference(wh: Int, s: Int, rows: Int, columns: Int): Int{
-        return (abs(wh - s) * 30 / (rows * columns))
+        return if(wh == 0 || s == 0)
+            (20 + abs(wh - s) * 30 / (rows * columns))
+        else
+            (abs(wh - s) * 30 / (rows * columns))
     }
 }
