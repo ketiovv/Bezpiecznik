@@ -15,16 +15,14 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         when(preference?.key){
-            "reset_btn" -> {
-                // TODO: Make definitely enabled because when we change fragment, it's disable again. It should be enabled till user set new pattern!
-                preferenceScreen.findPreference<SeekBarPreference>("row_number")?.isEnabled = true
-                preferenceScreen.findPreference<SeekBarPreference>("col_number")?.isEnabled = true
-            }
+//            "reset_btn" -> {
+//                preferenceScreen.findPreference<SeekBarPreference>("row_number")?.isEnabled = true
+//                preferenceScreen.findPreference<SeekBarPreference>("col_number")?.isEnabled = true
+//            }
             "about_btn" -> {
                 findNavController().navigate(R.id.action_settings2Fragment_to_aboutFragment)
             }
         }
         return super.onPreferenceTreeClick(preference)
     }
-
 }
