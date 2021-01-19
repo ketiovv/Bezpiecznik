@@ -282,11 +282,12 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
         val array = arrayOfSelectedDotsNumbers.toTypedArray()
         val res = Counter(patternRowCount, patternColCount, array)
-        val strength = res.verbalScaleResult(res.printer())
+        val resPrint = res.printer()
+        val strength = res.verbalScaleResult(resPrint)
 
 
         val toastStrength = res.verbalScaleResult(res.printer()).toString()
-        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength", Toast.LENGTH_LONG)
+        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength \nPoints:   $resPrint", Toast.LENGTH_LONG)
         toast.show()
 
         return strength
