@@ -8,8 +8,10 @@ import android.graphics.Path
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.Counter
@@ -17,14 +19,17 @@ import com.example.bezpiecznik.models.enums.DotState
 import com.example.bezpiecznik.models.enums.PatternStrength
 import com.example.bezpiecznik.viewmodels.PatternLockViewModel
 import com.example.bezpiecznik.viewmodels.PatternLockViewState
+import com.example.bezpiecznik.views.TestsFragment
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
-import java.util.ArrayList
+import java.util.*
 import kotlin.math.sqrt
+
 
 class PatternLockView(context: Context, attributeSet: AttributeSet)
     : MvvmGridLayout<PatternLockViewState, PatternLockViewModel>(context, attributeSet) {
     private var cells = ArrayList<CellView>()
     private var selectedCells = ArrayList<CellView>()
+
 
     private var patternPaint = Paint()
     private var patternPath = Path()
@@ -55,6 +60,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     // TODO: adjust in preferences
     private var previewTimeAfterDrawing = 1000
+
 
 
     init {
@@ -273,14 +279,15 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         for (cell in selectedCells) {
             arrayOfSelectedDotsNumbers.add(cell.dotNumber)
         }
-        Log.d("test", arrayOfSelectedDotsNumbers.toString())
 
         val array = arrayOfSelectedDotsNumbers.toTypedArray()
-
         val res = Counter(patternRowCount, patternColCount, array)
-        println(res.verbalScaleResult(res.printer()))
         val strength = res.verbalScaleResult(res.printer())
-        Log.d("test", strength.toString())
+
+
+        val toastStrength = res.verbalScaleResult(res.printer()).toString()
+        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength", Toast.LENGTH_LONG)
+        toast.show()
 
         return strength
     }
@@ -299,5 +306,4 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 //        })
 
     }
-
 }
