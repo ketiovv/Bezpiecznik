@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import com.example.bezpiecznik.models.enums.DotState
+import kotlin.math.min
 
 class CellView(context: Context,
                var dotNumber: Int,
@@ -107,7 +108,7 @@ class CellView(context: Context,
     }
 
     fun getRadius() : Int {
-        return (Math.min(width, height) - (paddingLeft + paddingRight)) / 2
+        return (min(width, height) - (paddingLeft + paddingRight)) / 2
     }
 
     fun getCenter() : Point {

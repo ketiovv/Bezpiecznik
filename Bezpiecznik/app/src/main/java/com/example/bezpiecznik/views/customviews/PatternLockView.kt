@@ -10,8 +10,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
-import androidx.core.view.setPadding
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.Counter
@@ -21,6 +19,7 @@ import com.example.bezpiecznik.viewmodels.PatternLockViewModel
 import com.example.bezpiecznik.viewmodels.PatternLockViewState
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
 import java.util.ArrayList
+import kotlin.math.sqrt
 
 class PatternLockView(context: Context, attributeSet: AttributeSet)
     : MvvmGridLayout<PatternLockViewState, PatternLockViewModel>(context, attributeSet) {
@@ -39,6 +38,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var sleepColor = Color.LTGRAY
     var selectedColor = Color.DKGRAY
 
+    //TODO: move to colors xml?
     var veryWeakPatternColor = Color.parseColor("#EC204F")
     var weakPatternColor = Color.parseColor("#FF922C")
     var mediumPatternColor = Color.parseColor("#FEED47")
@@ -51,7 +51,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var showCellBackground = false
     var showBorder = false
 
-    private var errorDuration = 400
+    // TODO: adjust in preferences
+    private var previewTimeAfterDrawing = 1000
 
 
     init {
@@ -115,12 +116,12 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
             if(!showIndicator){
                 patternPath.lineTo(center.x.toFloat(), center.y.toFloat())
             }else{
-                var previousCell = selectedCells[selectedCells.size - 2]
-                var previousCellCenter = previousCell.getCenter()
-                var diffX = center.x - previousCellCenter.x
-                var diffY = center.y - previousCellCenter.y
-                var radius = cell.getRadius()
-                var length = Math.sqrt((diffX * diffX + diffY * diffY).toDouble())
+                val previousCell = selectedCells[selectedCells.size - 2]
+                val previousCellCenter = previousCell.getCenter()
+                val diffX = center.x - previousCellCenter.x
+                val diffY = center.y - previousCellCenter.y
+                val radius = cell.getRadius()
+                val length = sqrt((diffX * diffX + diffY * diffY).toDouble())
 
                 patternPath.moveTo((previousCellCenter.x + radius * diffX / length).toFloat(), (previousCellCenter.y + radius * diffY / length).toFloat())
                 patternPath.lineTo((center.x - radius * diffX / length).toFloat(), (center.y - radius * diffY / length).toFloat())
@@ -141,17 +142,17 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                 val center = selectedCells[selectedCells.size - 1].getCenter()
                 canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPointY, patternPaint)
             } else{
-                var lastCell = selectedCells[selectedCells.size - 1]
-                var lastCellCenter = lastCell.getCenter()
-                var radius = lastCell.getRadius()
+                val lastCell = selectedCells[selectedCells.size - 1]
+                val lastCellCenter = lastCell.getCenter()
+                val radius = lastCell.getRadius()
 
                 if (!(lastPointX >= lastCellCenter.x - radius &&
                                 lastPointX <= lastCellCenter.x + radius &&
                                 lastPointY >= lastCellCenter.y - radius &&
                                 lastPointY <= lastCellCenter.y + radius)) {
-                    var diffX = lastPointX - lastCellCenter.x
-                    var diffY = lastPointY - lastCellCenter.y
-                    var length = Math.sqrt((diffX * diffX + diffY * diffY).toDouble())
+                    val diffX = lastPointX - lastCellCenter.x
+                    val diffY = lastPointY - lastCellCenter.y
+                    val length = sqrt((diffX * diffX + diffY * diffY).toDouble())
                     canvas?.drawLine((lastCellCenter.x + radius * diffX / length).toFloat(),
                             (lastCellCenter.y + radius * diffY / length).toFloat(),
                             lastPointX, lastPointY, patternPaint)
@@ -171,7 +172,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                                 sleepColor, selectedColor,
                                 showCellBackground, showBorder, showIndicator,
                                 border)
-                var cellPadding = 72 / columnCount
+                val cellPadding = 72 / columnCount
                 cell.setPadding(cellPadding, cellPadding, cellPadding, cellPadding)
                 addView(cell)
                 cells.add(cell)
@@ -239,7 +240,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
         postDelayed({
             reset()
-        }, errorDuration.toLong())
+        }, previewTimeAfterDrawing.toLong())
     }
 
     private fun getColorByPatternStrength(strength: PatternStrength):Int {
