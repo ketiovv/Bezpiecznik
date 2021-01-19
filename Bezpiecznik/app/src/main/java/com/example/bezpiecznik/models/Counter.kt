@@ -207,7 +207,7 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
     }
 
     private fun neighborsDifference(wh: Int, s: Int, rows: Int, columns: Int): Int{
-        return if(wh == 0 || s == 0)
+        return if(wh == 0 && s != 0 || wh != 0 && s == 0)
             (20 + abs(wh - s) * 30 / (rows * columns))
         else
             (abs(wh - s) * 30 / (rows * columns))
