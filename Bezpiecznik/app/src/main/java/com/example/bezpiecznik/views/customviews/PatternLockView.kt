@@ -51,6 +51,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var showCellBackground = false
     var showBorder = false
 
+    var drawAbility = true
+
     // TODO: adjust in preferences
     private var previewTimeAfterDrawing = 1000
 
@@ -72,6 +74,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (!drawAbility) return false
+
         when(event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 val hitCell = getHitCell(event.x.toInt(), event.y.toInt())
@@ -89,6 +93,39 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
             else -> return false
         }
         return true
+    }
+
+    override fun dispatchDraw(canvas: Canvas?) {
+        super.dispatchDraw(canvas)
+        canvas?.drawPath(patternPath, patternPaint)
+
+        if (selectedCells.size > 0 && lastPointX > 0 && lastPointY > 0) {
+            if (!showIndicator){
+                val center = selectedCells[selectedCells.size - 1].getCenter()
+                canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPointY, patternPaint)
+            } else{
+                val lastCell = selectedCells[selectedCells.size - 1]
+                val lastCellCenter = lastCell.getCenter()
+                val radius = lastCell.getRadius()
+
+                if (!(lastPointX >= lastCellCenter.x - radius &&
+                                lastPointX <= lastCellCenter.x + radius &&
+                                lastPointY >= lastCellCenter.y - radius &&
+                                lastPointY <= lastCellCenter.y + radius)) {
+                    val diffX = lastPointX - lastCellCenter.x
+                    val diffY = lastPointY - lastCellCenter.y
+                    val length = sqrt((diffX * diffX + diffY * diffY).toDouble())
+                    canvas?.drawLine((lastCellCenter.x + radius * diffX / length).toFloat(),
+                            (lastCellCenter.y + radius * diffY / length).toFloat(),
+                            lastPointX, lastPointY, patternPaint)
+                }
+            }
+        }
+    }
+
+    override fun removeAllViews() {
+        super.removeAllViews()
+        cells.clear()
     }
 
     private fun handleActionMove(event: MotionEvent) {
@@ -133,32 +170,20 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         }
     }
 
-    override fun dispatchDraw(canvas: Canvas?) {
-        super.dispatchDraw(canvas)
-        canvas?.drawPath(patternPath, patternPaint)
-
-        if (selectedCells.size > 0 && lastPointX > 0 && lastPointY > 0) {
-            if (!showIndicator){
-                val center = selectedCells[selectedCells.size - 1].getCenter()
-                canvas?.drawLine(center.x.toFloat(), center.y.toFloat(), lastPointX, lastPointY, patternPaint)
-            } else{
-                val lastCell = selectedCells[selectedCells.size - 1]
-                val lastCellCenter = lastCell.getCenter()
-                val radius = lastCell.getRadius()
-
-                if (!(lastPointX >= lastCellCenter.x - radius &&
-                                lastPointX <= lastCellCenter.x + radius &&
-                                lastPointY >= lastCellCenter.y - radius &&
-                                lastPointY <= lastCellCenter.y + radius)) {
-                    val diffX = lastPointX - lastCellCenter.x
-                    val diffY = lastPointY - lastCellCenter.y
-                    val length = sqrt((diffX * diffX + diffY * diffY).toDouble())
-                    canvas?.drawLine((lastCellCenter.x + radius * diffX / length).toFloat(),
-                            (lastCellCenter.y + radius * diffY / length).toFloat(),
-                            lastPointX, lastPointY, patternPaint)
-                }
-            }
+    fun reset() {
+        for(cell in selectedCells) {
+            cell.reset()
         }
+
+        selectedCells.clear()
+        patternPaint.color = selectedColor
+        patternPath.reset()
+
+//        lastPointX = 0f
+//        lastPointY = 0f
+
+        drawAbility = true
+        invalidate()
     }
 
     fun initDots() {
@@ -181,11 +206,6 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         }
     }
 
-    override fun removeAllViews() {
-        super.removeAllViews()
-        cells.clear()
-    }
-
     private fun initPathPaint() {
         patternPaint.isAntiAlias = true
         patternPaint.isDither = true
@@ -194,21 +214,6 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         patternPaint.strokeCap = Paint.Cap.ROUND
         patternPaint.strokeWidth = 6f
         patternPaint.color = selectedColor
-    }
-
-    fun reset() {
-        for(cell in selectedCells) {
-            cell.reset()
-        }
-
-        selectedCells.clear()
-        patternPaint.color = selectedColor
-        patternPath.reset()
-
-//        lastPointX = 0f
-//        lastPointY = 0f
-
-        invalidate()
     }
 
     private fun getHitCell(x: Int, y: Int) : CellView? {
@@ -236,6 +241,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         val strength = getPatternStrength()
         setColorAfterDrawing(getColorByPatternStrength(strength))
 
+        drawAbility = false
         invalidate()
 
         postDelayed({
@@ -280,6 +286,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     }
 
     // ViewModel
+
     override val viewModel = PatternLockViewModel()
 
     override fun onLifecycleOwnerAttached(lifecycleOwner: LifecycleOwner) {
