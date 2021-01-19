@@ -44,7 +44,9 @@ class CreateUserFragment : Fragment() {
                     UserViewModel.binID = s
                     sharedPref.edit().putString(getString(R.string.binID),s).commit()
                     sharedPref.edit().putString(getString(R.string.userID),user.id).commit()
-                    sharedPref.edit().putString(getString(R.string.collectionID),UserViewModel.collectionID).commit()
+                    userViewModel.createUserCollection {
+                        sharedPref.edit().putString(getString(R.string.collectionID),UserViewModel.collectionID).commit()
+                    }
                     activity?.runOnUiThread {
                         activity?.bottomNavigationView!!.visibility = View.VISIBLE
                         it.findNavController().navigate(R.id.testsFragment)

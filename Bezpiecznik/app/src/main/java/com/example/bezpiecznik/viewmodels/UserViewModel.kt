@@ -29,8 +29,8 @@ class UserViewModel() : ViewModel() {
             if (response.isSuccessful){
                 val data = response.body()
                 if (data != null) {
-                    saveToSPCallback(user,data.name)
-                    createUserCollection()
+                        saveToSPCallback(user,data.name)
+
                 }
             }
             else{
@@ -56,14 +56,15 @@ class UserViewModel() : ViewModel() {
         }
     }
 
-    private fun createUserCollection(){
+    public fun createUserCollection(doneCallback: ((d: Boolean) -> Unit)){
         GlobalScope.launch(Dispatchers.IO) {
             val response = api.createUserCollection(Response(binID)).awaitResponse()
             if (response.isSuccessful){
                 val data = response.body()
                 if(data != null){
-                    Log.d("Response",data.toString())
                     collectionID = data.name
+                    Log.d("myTag", data.name)
+                    doneCallback(true)
                 }
             }
             else{
