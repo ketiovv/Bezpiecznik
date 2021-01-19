@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import com.example.bezpiecznik.models.enums.DotState
 import kotlin.math.min
@@ -12,6 +11,7 @@ import kotlin.math.min
 class CellView(context: Context,
                var dotNumber: Int,
                var columnCount: Int,
+               var rowCount:Int,
 
                var sleepColor: Int,
                var selectedColor: Int,
@@ -32,9 +32,30 @@ class CellView(context: Context,
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        var cellWidth = MeasureSpec.getSize(widthMeasureSpec) / columnCount
-        var cellHeight = cellWidth
-        setMeasuredDimension(cellWidth, cellHeight)
+
+        if (columnCount + 1 >= rowCount){
+            val cellWidth = MeasureSpec.getSize(widthMeasureSpec) / columnCount
+            setMeasuredDimension(cellWidth, cellWidth)
+
+        } else {
+            // TODO: centering
+
+            val difference  = rowCount - columnCount
+            val ratio: Double
+            ratio = when {
+                difference < 3 -> {
+                    0.7
+                }
+                difference == 3 -> {
+                    0.8
+                }
+                else -> {
+                    0.85
+                }
+            }
+            val cellHeight = ((MeasureSpec.getSize(heightMeasureSpec) * ratio) / rowCount).toInt()
+            setMeasuredDimension(cellHeight, cellHeight)
+        }
     }
 
     override fun onDraw(canvas: Canvas?) {
