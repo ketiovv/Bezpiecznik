@@ -51,6 +51,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     var showCellBackground = false
     var showBorder = false
 
+    var invisibleDrawing = false
+
     var drawAbility = true
 
     // TODO: adjust in preferences
@@ -97,6 +99,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     override fun dispatchDraw(canvas: Canvas?) {
         super.dispatchDraw(canvas)
+        if (invisibleDrawing) return
         canvas?.drawPath(patternPath, patternPaint)
 
         if (selectedCells.size > 0 && lastPointX > 0 && lastPointY > 0) {
@@ -144,6 +147,8 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
 
     private fun notifyCellSelected(cell: CellView) {
         selectedCells.add(cell)
+
+        if (invisibleDrawing) return
 
         cell.setState(DotState.SELECTED)
         val center = cell.getCenter()
@@ -239,7 +244,9 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         lastPointY = 0f
 
         val strength = getPatternStrength()
-        setColorAfterDrawing(getColorByPatternStrength(strength))
+        if (!invisibleDrawing){
+            setColorAfterDrawing(getColorByPatternStrength(strength))
+        }
 
         drawAbility = false
         invalidate()
