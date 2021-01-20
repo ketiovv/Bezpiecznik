@@ -28,7 +28,7 @@ class HistoryFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         viewManager = LinearLayoutManager(requireContext())
-        statsListAdapter = StatsListAdapter(viewModel.sessionList)
+        statsListAdapter = StatsListAdapter(HistoryViewModel.sessionList)
 
 
         if (HistoryViewModel.dataReady.value == null)
@@ -41,7 +41,7 @@ class HistoryFragment : Fragment() {
         }
 
 
-        viewModel.sessionList.observe(viewLifecycleOwner){
+        HistoryViewModel.sessionList.observe(viewLifecycleOwner){
             statsListAdapter.notifyDataSetChanged()
         }
 

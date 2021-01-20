@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 class HistoryViewModel : ViewModel() {
-    var sessionList =  MutableLiveData<ArrayList<Session>>()
+
 
 
     private val api = Retrofit.Builder().baseUrl(ApiRoutes.BASE_URL)
@@ -78,5 +78,6 @@ class HistoryViewModel : ViewModel() {
 
     companion object{
         var dataReady = MutableLiveData<Boolean>()
+        var sessionList =  MutableLiveData<ArrayList<Session>>()
     }
 }

@@ -70,8 +70,10 @@ class TestsFragment : Fragment() {
             HistoryViewModel.dataReady.postValue(false)
             //Log.d("myTagAttempts", attempts.toString())
             historyViewModel.getSessions {
-                historyViewModel.addSession(Session(LocalDateTime.now().toString(),
-                        attempts, UserViewModel.user.id )){
+                val session = Session(LocalDateTime.now().toString(),
+                        attempts, UserViewModel.user.id )
+                //HistoryViewModel.sessionList.value!!.add(session)
+                historyViewModel.addSession(session){
                     HistoryViewModel.dataReady.postValue(true)
                 }
             }
