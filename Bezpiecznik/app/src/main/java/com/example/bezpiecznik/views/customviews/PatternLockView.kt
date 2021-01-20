@@ -306,11 +306,21 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         val strength = res.verbalScaleResult(resPrint)
 
 
-        val toastStrength = res.verbalScaleResult(res.printer()).toString()
-        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength \nPoints:   $resPrint", Toast.LENGTH_SHORT)
+        val toastStrength = res.verbalScaleResult(res.printer())
+        val toast = Toast.makeText(context, "Pattern strength: $resPrint% (${getStrengthInString(toastStrength)})", Toast.LENGTH_SHORT)
         toast.show()
 
         return strength
+    }
+
+    private fun getStrengthInString(strength: PatternStrength) :String{
+        return when(strength){
+            PatternStrength.VERY_STRONG -> "Very strong"
+            PatternStrength.STRONG -> "Strong"
+            PatternStrength.MEDIUM -> "Medium"
+            PatternStrength.WEAK -> "Weak"
+            else -> "Very weak"
+        }
     }
 
     // ViewModel
