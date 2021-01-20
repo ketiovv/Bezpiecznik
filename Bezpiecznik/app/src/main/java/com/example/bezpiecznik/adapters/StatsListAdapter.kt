@@ -42,14 +42,13 @@ class StatsListAdapter(var data: MutableLiveData<ArrayList<Session>>):RecyclerVi
         var time = fdate[1].substringBefore(".")
 
 
-        Log.d("myTag",fdate[0].toString())
         for(a in data.value?.get(position)?.attempt!!){
             attempts = attempts + "Pattern: ${a.pattern}" + "\nStrength: ${a.strength}\n" + "Grid size: ${a.columns}x${a.rows}\n\n"
 
         }
 
 
-        textViewSessionDate.text = "$time ${fdate[0]}"
+        textViewSessionDate.text = "Date: ${fdate[0]} Time: $time"
         textViewAttempts.text = attempts
         expandButton.setOnClickListener(){
             if (expandableContainer.visibility == View.GONE)
