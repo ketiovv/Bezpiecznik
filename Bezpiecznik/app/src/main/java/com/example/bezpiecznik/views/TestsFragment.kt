@@ -2,7 +2,6 @@ package com.example.bezpiecznik.views
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,21 +11,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.entities.Session
-import com.example.bezpiecznik.viewmodels.StatsViewModel
+import com.example.bezpiecznik.viewmodels.HistoryViewModel
 import com.example.bezpiecznik.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.fragment_tests.*
 import java.time.LocalDateTime
 
 class TestsFragment : Fragment() {
 
-    private lateinit var statsViewModel: StatsViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        statsViewModel = ViewModelProvider(this).get(StatsViewModel::class.java)
+        historyViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tests, container, false)
@@ -68,9 +67,13 @@ class TestsFragment : Fragment() {
         val attempts = pattern_lock_id.getAttempts()
         if (attempts.size != 0)
         {
-            Log.d("myTagAttempts", attempts.toString())
-            statsViewModel.getSessions {
-                statsViewModel.addSession(Session(LocalDateTime.now().toString(), attempts, UserViewModel.user.id ))
+            HistoryViewModel.dataReady.postValue(false)
+            //Log.d("myTagAttempts", attempts.toString())
+            historyViewModel.getSessions {
+                historyViewModel.addSession(Session(LocalDateTime.now().toString(),
+                        attempts, UserViewModel.user.id )){
+                    HistoryViewModel.dataReady.postValue(true)
+                }
             }
         }
 

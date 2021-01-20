@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="views.StatsFragment">
+    tools:context="views.HistoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -11,6 +11,6 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="55dp" />
+        android:layout_marginBottom="5dp" />
 
 </FrameLayout>

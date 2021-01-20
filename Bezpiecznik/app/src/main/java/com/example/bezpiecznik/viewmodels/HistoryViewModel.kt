@@ -22,7 +22,7 @@ import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
-class StatsViewModel : ViewModel() {
+class HistoryViewModel : ViewModel() {
     var sessionList =  MutableLiveData<ArrayList<Session>>()
 
 

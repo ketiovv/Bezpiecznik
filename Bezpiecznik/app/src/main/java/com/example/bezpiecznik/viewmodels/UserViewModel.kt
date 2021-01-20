@@ -68,14 +68,14 @@ class UserViewModel() : ViewModel() {
             if (response.isSuccessful){
                 val data = response.body()
                 if(data != null){
-                    Log.d("myTagUVM", data.toString())
+                    //Log.d("myTagUVM", data.toString())
                     collectionID = data.name
-                    Log.d("myTagUVM", data.name)
+                    //Log.d("myTagUVM", data.name)
                     doneCallback(true)
                 }
             }
             else{
-                Log.d("api-connection","response failed")
+                Log.d("api-connectionUVM","response failed")
             }
         }
     }

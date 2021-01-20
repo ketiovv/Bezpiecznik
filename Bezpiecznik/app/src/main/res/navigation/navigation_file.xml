@@ -16,10 +16,10 @@
         android:label="TestsFragment"
         tools:layout="@layout/fragment_tests"/>
     <fragment
-        android:id="@+id/statsFragment"
-        android:name="com.example.bezpiecznik.views.StatsFragment"
-        android:label="StatsFragment"
-        tools:layout="@layout/fragment_stats"/>
+        android:id="@+id/historyFragment"
+        android:name="com.example.bezpiecznik.views.HistoryFragment"
+        android:label="HistoryFragment"
+        tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.bezpiecznik.views.AboutFragment"

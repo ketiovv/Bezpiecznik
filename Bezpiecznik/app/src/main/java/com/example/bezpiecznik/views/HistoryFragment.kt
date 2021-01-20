@@ -7,38 +7,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.adapters.StatsListAdapter
-import com.example.bezpiecznik.viewmodels.StatsViewModel
-import com.example.bezpiecznik.viewmodels.UserViewModel
-import kotlinx.android.synthetic.main.fragment_stats.*
+import com.example.bezpiecznik.viewmodels.HistoryViewModel
+import kotlinx.android.synthetic.main.fragment_history.*
 
-class StatsFragment : Fragment() {
+class HistoryFragment : Fragment() {
     lateinit var viewManager: RecyclerView.LayoutManager
     lateinit var statsListAdapter: StatsListAdapter
-    lateinit var viewModel: StatsViewModel
+    lateinit var viewModel: HistoryViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        viewModel = ViewModelProvider(this).get(StatsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         viewManager = LinearLayoutManager(requireContext())
         statsListAdapter = StatsListAdapter(viewModel.sessionList)
 
 
-        if (StatsViewModel.dataReady.value == null)
+        if (HistoryViewModel.dataReady.value == null)
             viewModel.getSessions {  }
 
 
-        StatsViewModel.dataReady.observe(viewLifecycleOwner){
+        HistoryViewModel.dataReady.observe(viewLifecycleOwner){
             if(it)
                 viewModel.getSessions {  }
         }
@@ -49,7 +46,7 @@ class StatsFragment : Fragment() {
         }
 
 
-        return inflater.inflate(R.layout.fragment_stats, container, false)
+        return inflater.inflate(R.layout.fragment_history, container, false)
 
 
     }
@@ -67,6 +64,6 @@ class StatsFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = StatsFragment()
+        fun newInstance() = HistoryFragment()
     }
 }

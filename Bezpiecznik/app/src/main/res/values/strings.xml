@@ -3,7 +3,7 @@
 
     <!-- Menu page -->
     <string name="tests">Tests</string>
-    <string name="statistics">Statistics</string>
+    <string name="history">History</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
 
@@ -17,11 +17,7 @@
     <string name="desc">Application description:</string>
 
     <!-- Stats fragment  -->
-    <string name="start_date">Start date:</string>
-    <string name="end_date">End date:</string>
-    <string name="duration">Duration:</string>
-    <string name="positive_attempts">Positive attempts:</string>
-    <string name="attempts">All attempts:</string>
+    <string name="attempts">Session attempts:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
