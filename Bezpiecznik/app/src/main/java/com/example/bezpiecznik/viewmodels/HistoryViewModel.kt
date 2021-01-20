@@ -25,29 +25,18 @@ import java.util.concurrent.TimeUnit
 class StatsViewModel : ViewModel() {
     var sessionList =  MutableLiveData<ArrayList<Session>>()
 
-    private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
-        .writeTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .build();
 
     private val api = Retrofit.Builder().baseUrl(ApiRoutes.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create()).client(okHttpClient).build()
+        .addConverterFactory(GsonConverterFactory.create()).build()
         .create(IApiRequest::class.java)
 
-
-
-    init {
-        //addMockDataToSessions()
-        getSessions(){}
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addMockDataToSessions(){
         sessionList.postValue(arrayListOf(Session(LocalDateTime.now().toString(),null,""), Session(LocalDateTime.now().toString(),null,"")))
     }
 
-    fun addSession(session: Session){
+    fun addSession(session: Session,  doneCallback: ((d: Boolean) -> Unit)){
         Log.d("myTag","Hello form add Session")
         sessionList.value!!.add(session)
         GlobalScope.launch(Dispatchers.IO) {
@@ -55,9 +44,9 @@ class StatsViewModel : ViewModel() {
             if (response.isSuccessful){
                 val data = response.body()
                 if(data != null){
-                    //UserViewModel.collectionID = data.name
                     Log.d("myTagSTVM", "chuj")
-                    //sessionList.value!!.add(session)
+                    doneCallback(true)
+
                 }
             }
             else{
@@ -72,8 +61,11 @@ class StatsViewModel : ViewModel() {
             val response = api.getUserCollection(UserViewModel.collectionID).awaitResponse()
             if (response.isSuccessful){
                 val data = response.body()
+
                 if(data != null){
-                    Log.d("statsViewModel", data.records[data.records.size -1].attempt.toString())
+                    if (data.records[0].userId == "")
+                        data.records.removeAt(0)
+                    //data.records.reverse()
                     sessionList.postValue(data.records)
                     doneCallback(true)
                 }
@@ -82,41 +74,9 @@ class StatsViewModel : ViewModel() {
                 Log.d("api-connection","response failed")
             }
 
-    }
+    } }
 
-    fun getSession(id: String){
-
+    companion object{
+        var dataReady = MutableLiveData<Boolean>()
     }
-    //        var userList = MutableLiveData<MutableList<User>>()
-//
-//
-//        var user = User("1","Konrad","Konrad123", mutableListOf(),
-//            Pattern(mutableListOf(Cell(1,0))),Settings())
-//
-//        var gson = Gson()
-//        var jsonString = gson.toJson(user)
-//        Log.d("myTag",jsonString)
-//
-//        val api = Retrofit.Builder().baseUrl(ApiRoutes.BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//            .create(IApiRequest::class.java)
-//
-//        //api.addJSon(user)
-//
-//
-//        GlobalScope.launch(Dispatchers.IO) {
-//            val response = api.getJson().awaitResponse()
-//            if (response.isSuccessful){
-//                val data= response.body()!!
-//                // postValue instead of value, because it's called asynchronous
-//                userList.postValue(mutableListOf(data))
-//                Log.d("api-connection",userList.value!!.toString())
-//
-//            }
-//            else{
-//                Log.d("api-connection","response failed")
-//                userList.postValue(ArrayList())
-//            }
-//        }
-}}
+}
