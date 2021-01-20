@@ -4,7 +4,13 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.print.PrintAttributes
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import androidx.constraintlayout.widget.Constraints
+import androidx.core.view.marginLeft
+import androidx.core.view.marginStart
 import com.example.bezpiecznik.models.enums.DotState
 import kotlin.math.min
 
@@ -54,9 +60,17 @@ class CellView(context: Context,
                 }
             }
             val cellHeight = ((MeasureSpec.getSize(heightMeasureSpec) * ratio) / rowCount).toInt()
+            val freeSpaceToSetOnLeft = (MeasureSpec.getSize(widthMeasureSpec) - (columnCount * cellHeight)) / 2
+
+            if (dotNumber % columnCount == 1){
+                val t = this.layoutParams as ViewGroup.MarginLayoutParams
+                t.setMargins(freeSpaceToSetOnLeft,0,0,0)
+            }
+
             setMeasuredDimension(cellHeight, cellHeight)
         }
     }
+
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)

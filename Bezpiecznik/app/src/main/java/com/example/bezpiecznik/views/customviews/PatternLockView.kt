@@ -11,7 +11,10 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.Counter
@@ -22,6 +25,7 @@ import com.example.bezpiecznik.viewmodels.PatternLockViewState
 import com.example.bezpiecznik.views.TestsFragment
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
 import java.util.*
+import kotlin.math.atan2
 import kotlin.math.sqrt
 
 
@@ -174,7 +178,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                 patternPath.moveTo((previousCellCenter.x + radius * diffX / length).toFloat(), (previousCellCenter.y + radius * diffY / length).toFloat())
                 patternPath.lineTo((center.x - radius * diffX / length).toFloat(), (center.y - radius * diffY / length).toFloat())
 
-                val degree = Math.toDegrees(Math.atan2(diffY.toDouble(), diffX.toDouble())) + 90
+                val degree = Math.toDegrees(atan2(diffY.toDouble(), diffX.toDouble())) + 90
                 previousCell.setDegree(degree.toFloat())
                 previousCell.invalidate()
             }
