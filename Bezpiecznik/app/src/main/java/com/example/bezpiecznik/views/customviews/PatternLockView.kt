@@ -11,7 +11,10 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.Counter
@@ -24,6 +27,7 @@ import com.example.bezpiecznik.views.TestsFragment
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.atan2
 import kotlin.math.sqrt
 
 
@@ -177,7 +181,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
                 patternPath.moveTo((previousCellCenter.x + radius * diffX / length).toFloat(), (previousCellCenter.y + radius * diffY / length).toFloat())
                 patternPath.lineTo((center.x - radius * diffX / length).toFloat(), (center.y - radius * diffY / length).toFloat())
 
-                val degree = Math.toDegrees(Math.atan2(diffY.toDouble(), diffX.toDouble())) + 90
+                val degree = Math.toDegrees(atan2(diffY.toDouble(), diffX.toDouble())) + 90
                 previousCell.setDegree(degree.toFloat())
                 previousCell.invalidate()
             }
@@ -306,18 +310,29 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         val strength = res.verbalScaleResult(resPrint)
 
 
-        val toastStrength = res.verbalScaleResult(res.printer()).toString()
-        val toast = Toast.makeText(context, "Strength of your code:   $toastStrength \nPoints:   $resPrint", Toast.LENGTH_SHORT)
+        val toastStrength = res.verbalScaleResult(res.printer())
+        val toast = Toast.makeText(context, "Pattern strength: $resPrint% (${getStrengthInString(toastStrength)})", Toast.LENGTH_SHORT)
         toast.show()
 
         //TODO: Move attept to better place
-        attemptList.add(Attempt(res.toStringConverter(array),toastStrength,patternRowCount, patternColCount))
+        attemptList.add(Attempt(res.toStringConverter(array),getStrengthInString(toastStrength),patternRowCount, patternColCount))
 
         return strength
     }
 
-    fun getAttempts(): ArrayList<Attempt>{
+
+    fun getAttempts(): ArrayList<Attempt> {
         return attemptList
+    }
+    private fun getStrengthInString(strength: PatternStrength) :String{
+        return when(strength){
+            PatternStrength.VERY_STRONG -> "Very strong"
+            PatternStrength.STRONG -> "Strong"
+            PatternStrength.MEDIUM -> "Medium"
+            PatternStrength.WEAK -> "Weak"
+            else -> "Very weak"
+        }
+
     }
 
     // ViewModel
