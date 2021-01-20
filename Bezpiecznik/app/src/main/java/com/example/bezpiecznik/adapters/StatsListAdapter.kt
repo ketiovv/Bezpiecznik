@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.entities.Session
-import com.example.bezpiecznik.models.entities.User
 
-class StatsListAdapter(var data: LiveData<MutableList<Session>>):RecyclerView.Adapter<StatsListAdapter.Holder>() {
+class StatsListAdapter(var data: MutableLiveData<ArrayList<Session>>):RecyclerView.Adapter<StatsListAdapter.Holder>() {
 
 
     class Holder(view:View): RecyclerView.ViewHolder(view)

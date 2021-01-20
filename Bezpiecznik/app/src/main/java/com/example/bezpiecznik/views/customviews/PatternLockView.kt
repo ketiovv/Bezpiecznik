@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.Counter
+import com.example.bezpiecznik.models.entities.Attempt
 import com.example.bezpiecznik.models.enums.DotState
 import com.example.bezpiecznik.models.enums.PatternStrength
 import com.example.bezpiecznik.viewmodels.PatternLockViewModel
@@ -22,6 +23,7 @@ import com.example.bezpiecznik.viewmodels.PatternLockViewState
 import com.example.bezpiecznik.views.TestsFragment
 import com.example.bezpiecznik.views.customviews.mvvm.MvvmGridLayout
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.sqrt
 
 
@@ -29,6 +31,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
     : MvvmGridLayout<PatternLockViewState, PatternLockViewModel>(context, attributeSet) {
     private var cells = ArrayList<CellView>()
     private var selectedCells = ArrayList<CellView>()
+    private var attemptList = ArrayList<Attempt>()
 
 
     private var patternPaint = Paint()
@@ -297,6 +300,7 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         }
 
         val array = arrayOfSelectedDotsNumbers.toTypedArray()
+
         val res = Counter(patternRowCount, patternColCount, array)
         val resPrint = res.printer()
         val strength = res.verbalScaleResult(resPrint)
@@ -306,7 +310,14 @@ class PatternLockView(context: Context, attributeSet: AttributeSet)
         val toast = Toast.makeText(context, "Strength of your code:   $toastStrength \nPoints:   $resPrint", Toast.LENGTH_SHORT)
         toast.show()
 
+        //TODO: Move attept to better place
+        attemptList.add(Attempt(res.toStringConverter(array),toastStrength,patternRowCount, patternColCount))
+
         return strength
+    }
+
+    fun getAttempts(): ArrayList<Attempt>{
+        return attemptList
     }
 
     // ViewModel

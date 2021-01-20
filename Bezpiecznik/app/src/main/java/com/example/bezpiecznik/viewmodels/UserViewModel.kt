@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.bezpiecznik.models.api.ApiRoutes
 import com.example.bezpiecznik.models.api.IApiRequest
+import com.example.bezpiecznik.models.api.Records
 import com.example.bezpiecznik.models.api.Response
+import com.example.bezpiecznik.models.entities.Attempt
+import com.example.bezpiecznik.models.entities.Session
 import com.example.bezpiecznik.models.entities.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -56,14 +59,18 @@ class UserViewModel() : ViewModel() {
         }
     }
 
-    public fun createUserCollection(doneCallback: ((d: Boolean) -> Unit)){
+    fun createUserCollection(doneCallback: ((d: Boolean) -> Unit)){
         GlobalScope.launch(Dispatchers.IO) {
-            val response = api.createUserCollection(Response(binID)).awaitResponse()
+            val response = api.createUserCollection(
+                    Records( arrayListOf(  Session("",
+                mutableListOf(Attempt("","",0,0)),""))
+                )).awaitResponse()
             if (response.isSuccessful){
                 val data = response.body()
                 if(data != null){
+                    Log.d("myTagUVM", data.toString())
                     collectionID = data.name
-                    Log.d("myTag", data.name)
+                    Log.d("myTagUVM", data.name)
                     doneCallback(true)
                 }
             }

@@ -2,13 +2,7 @@ package com.example.bezpiecznik.models.entities
 
 import java.time.LocalDateTime
 
-class Session(var startDate: LocalDateTime, var endDate: LocalDateTime, var user: User?,
-                var attempt: MutableList<Attempt>?) {
-    fun getTime(){
+class Session(var startDate: String,
+                var attempt: MutableList<Attempt>?, var userId: String) {
 
-    }
-
-    fun getPositiveAttempts(){
-
-    }
 }
