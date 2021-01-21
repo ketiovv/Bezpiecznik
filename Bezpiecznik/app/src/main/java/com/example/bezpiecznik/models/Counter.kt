@@ -11,6 +11,7 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
         val c = code
         val rc = code.reversedArray()
         val sc = toStringConverter(c)
+        val rsc = toStringConverter(rc)
         var res = 100
 
         val xd = neighborsDifference(neighborHorizontallyVertically(columns,c),neighborDiagonally(columns,c),rows,columns)
@@ -19,41 +20,38 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
 
         if(diagonal1(rows,columns,c) || diagonal2(rows,columns,c) || diagonal1(rows,columns,rc) || diagonal2(rows,columns,rc)){
             res -= 80
-            println("przekatna")
         }
         else{
             if(horizontalLines(columns,c) || verticalLines(rows,columns,c)){
                 res -= (30 + lengthRelative(rows,columns,c) + xd)
-                println("lewo - góra")
             }
             else if(horizontalLines(columns,rc) || verticalLines(rows,columns,rc)){
                 res -= (25 + lengthRelative(rows,columns,c) + xd)
-                println("prawo - dół")
             }
             else{
                 if(shorterSide(rows,columns,c)){
                     res -= (25 + lengthRelative(rows,columns,c) + xd)
-                    println("krótki")
+
                 }
                 else{
                     if(longerSide(rows,columns,c)){
                         res -= (20 + lengthRelative(rows,columns,c) + xd)
-                        println("długi")
                     }
                     else{
                         res -= (lengthRelative(rows,columns,c) + xd)
-                        println("3 + 4")
                     }
                 }
             }
 
         }
 
-        println("sasiedzi "+xd)
-        println("dlugosc wzgledem: "+lengthRelative(rows,columns,c))
-
         if(res < 0)
             res = 0
+
+        for(i in PopularPatterns.Easy.indices){
+            if(sc == PopularPatterns.Easy[i] || rsc == PopularPatterns.Easy[i])
+                res = 20
+        }
 
         return res
     }
@@ -166,7 +164,7 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
     private fun neighborHorizontallyVertically(columns: Int, code: Array<Int>): Int{
         var ile = 0
         for(i in 1 until code.size)
-            if (code[i] == code[i - 1] - 1 || (code[i] == code[i - 1] + 1 && code[i]%columns != 1) || code[i] == code[i - 1] - columns || code[i] == code[i - 1] + columns)
+            if ((code[i] == code[i - 1] - 1 && code[i]%columns != 0) || (code[i] == code[i - 1] + 1 && code[i]%columns != 1) || code[i] == code[i - 1] - columns || code[i] == code[i - 1] + columns)
                 ile++
         return ile
     }
@@ -174,7 +172,7 @@ class Counter(private val rowsB: Int, private val columnsB:Int, private val code
     private fun neighborDiagonally(columns: Int, code: Array<Int>): Int{
         var ile = 0
         for(i in 1 until code.size)
-            if (code[i] == code[i - 1] + columns + 1 || code[i] == code[i - 1] - columns + 1 || code[i] == code[i - 1] - columns - 1 || code[i] == code[i - 1] + columns - 1)
+            if ((code[i] == code[i - 1] + columns + 1 && code[i]%columns != 1) || (code[i] == code[i - 1] - columns + 1 && code[i]%columns != 1) || (code[i] == code[i - 1] - columns - 1 && code[i]%columns != 0) || (code[i] == code[i - 1] + columns - 1 && code[i]%columns != 0))
                 ile++
         return ile
     }
