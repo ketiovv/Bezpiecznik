@@ -37,20 +37,16 @@ class HistoryViewModel : ViewModel() {
     }
 
     fun addSession(session: Session,  doneCallback: ((d: Boolean) -> Unit)){
-        Log.d("myTag","Hello form add Session")
         sessionList.value!!.add(session)
         GlobalScope.launch(Dispatchers.IO) {
             val response = api.addSession( UserViewModel.collectionID, Records(sessionList.value!!)).awaitResponse()
             if (response.isSuccessful){
                 val data = response.body()
                 if(data != null){
-                    Log.d("myTagSTVM", "chuj")
                     doneCallback(true)
-
                 }
             }
             else{
-
                 Log.d("api-connection",response.message())
             }
         }
@@ -73,7 +69,6 @@ class HistoryViewModel : ViewModel() {
             else{
                 Log.d("api-connection","response failed")
             }
-
     } }
 
     companion object{

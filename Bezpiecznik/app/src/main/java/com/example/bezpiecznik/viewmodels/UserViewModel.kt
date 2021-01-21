@@ -25,7 +25,7 @@ class UserViewModel() : ViewModel() {
         .create(IApiRequest::class.java)
 
     fun createUser(name: String, masterPassword : String, saveToSPCallback:((u: User, id: String) -> Unit)){
-        val userID: String = rand()
+        val userID: String = generateUserId()
         val user = User(userID, name, masterPassword)
         GlobalScope.launch(Dispatchers.IO) {
             val response  = api.addUser(user).awaitResponse()
@@ -33,7 +33,6 @@ class UserViewModel() : ViewModel() {
                 val data = response.body()
                 if (data != null) {
                         saveToSPCallback(user,data.name)
-
                 }
             }
             else{
@@ -68,9 +67,7 @@ class UserViewModel() : ViewModel() {
             if (response.isSuccessful){
                 val data = response.body()
                 if(data != null){
-                    //Log.d("myTagUVM", data.toString())
                     collectionID = data.name
-                    //Log.d("myTagUVM", data.name)
                     doneCallback(true)
                 }
             }
@@ -80,7 +77,7 @@ class UserViewModel() : ViewModel() {
         }
     }
 
-    private fun rand(): String {
+    private fun generateUserId(): String {
         val random = SecureRandom()
         var randomString: String = ""
         random.setSeed(random.generateSeed(20))

@@ -12,13 +12,13 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
-import com.example.bezpiecznik.adapters.StatsListAdapter
+import com.example.bezpiecznik.adapters.HistoryListAdapter
 import com.example.bezpiecznik.viewmodels.HistoryViewModel
 import kotlinx.android.synthetic.main.fragment_history.*
 
 class HistoryFragment : Fragment() {
     lateinit var viewManager: RecyclerView.LayoutManager
-    lateinit var statsListAdapter: StatsListAdapter
+    lateinit var historyListAdapter: HistoryListAdapter
     lateinit var viewModel: HistoryViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -28,7 +28,7 @@ class HistoryFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         viewManager = LinearLayoutManager(requireContext())
-        statsListAdapter = StatsListAdapter(HistoryViewModel.sessionList)
+        historyListAdapter = HistoryListAdapter(HistoryViewModel.sessionList)
 
 
         if (HistoryViewModel.dataReady.value == null)
@@ -42,7 +42,7 @@ class HistoryFragment : Fragment() {
 
 
         HistoryViewModel.sessionList.observe(viewLifecycleOwner){
-            statsListAdapter.notifyDataSetChanged()
+            historyListAdapter.notifyDataSetChanged()
         }
 
 
@@ -56,7 +56,7 @@ class HistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView.apply{
-            adapter=statsListAdapter
+            adapter=historyListAdapter
             layoutManager=viewManager
         }
 

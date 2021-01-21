@@ -3,20 +3,18 @@ package com.example.bezpiecznik.adapters
 import android.annotation.SuppressLint
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.models.entities.Session
 
-class StatsListAdapter(var data: MutableLiveData<ArrayList<Session>>):RecyclerView.Adapter<StatsListAdapter.Holder>() {
+class HistoryListAdapter(var data: MutableLiveData<ArrayList<Session>>):RecyclerView.Adapter<HistoryListAdapter.Holder>() {
 
 
     class Holder(view:View): RecyclerView.ViewHolder(view)
